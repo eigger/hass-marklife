@@ -27,7 +27,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install --upgrade pip
-          pip install pytest
+          pip install pytest pytest-asyncio bleak
           python -c "import json; print('\n'.join(json.load(open('custom_components/marklife/manifest.json'))['requirements']))" > requirements.txt
           pip install -r requirements.txt
           
