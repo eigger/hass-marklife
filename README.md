@@ -9,13 +9,7 @@ Marklife Label Printer Home Assistant Integration
 
 BLE protocol layer ported from [tomLadder/thermoprint](https://github.com/tomLadder/thermoprint) (MIT).
 
-> [!CAUTION]
-> **Most printers have not been tested yet.**
->
-> While the P15 has been confirmed to work, most entries in [Supported Models](#supported-models) are still marked *untested*. The protocol layer is a port that passes unit tests against the documented wire format, but has not been verified on physical hardware for every model.
->
-> If you own any of these untested printers, [a report either way](https://github.com/eigger/hass-marklife/issues)
-> is highly appreciated — including "it printed nothing and here is the debug log".
+
 
 ## Feedback & Support
 
@@ -33,7 +27,7 @@ Two BLE protocol families cover every Marklife printer Home Assistant can reach.
 
 | Model | Family | Print head | Status |
 |-------|--------|-----------|--------|
-| P15, P15R, P15S | L11 | 384 px | **tested** — P15 confirmed working |
+| P15, P15R, P15S | L11 | 384 px | ✅ P15 confirmed working |
 | P7, P7R | L11 | 384 px | untested — protocol proven in thermoprint |
 | P12, P11 | L11 | 384 px | untested — protocol proven in thermoprint |
 | P1s, M1, S15, S12, LP15, LP90, LPC74, iSPACE_LP15, OUT_LPC | L11 | 384 px | untested — mapped to the P15/P12 profile by the vendor app |
