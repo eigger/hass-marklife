@@ -1,0 +1,79 @@
+print:
+  target:
+    device:
+      integration: marklife
+  fields:
+    payload:
+      required: true
+      example: |
+        - type: text
+          value: Hello World!
+          x: 5
+          y: 5
+          size: 40
+      default:
+        - type: text
+          value: Hello World!
+          x: 5
+          y: 5
+          size: 40
+      selector:
+        object:
+    width:
+      required: false
+      example: 384
+      selector:
+        number:
+          min: 8
+          max: 1600
+          step: 1
+    height:
+      required: false
+      example: 240
+      default: 240
+      selector:
+        number:
+          min: 8
+          max: 4000
+          step: 1
+    rotate:
+      required: false
+      example: "0"
+      selector:
+        number:
+          min: 0
+          max: 270
+          step: 90
+    density:
+      required: false
+      selector:
+        number:
+          min: 1
+          max: 3
+          step: 1
+    paper_type:
+      required: false
+      default: gap
+      selector:
+        select:
+          options:
+            - gap
+            - continuous
+    copies:
+      required: false
+      default: 1
+      selector:
+        number:
+          min: 1
+          max: 20
+          step: 1
+    dither:
+      required: false
+      example: false
+      selector:
+        boolean:
+    preview:
+      required: false
+      example: "false"
+      selector:
+        boolean:

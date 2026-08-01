@@ -1,0 +1,121 @@
+{
+  "config": {
+    "flow_title": "{name}",
+    "step": {
+      "user": {
+        "description": "Choose the Marklife printer you want to set up.",
+        "data": {
+          "address": "Device",
+          "scan_interval": "Scan interval",
+          "keep_connection": "Keep BLE connection open"
+        },
+        "data_description": {
+          "scan_interval": "How often to read battery and status. Each poll opens a BLE connection, and an ESP32 Bluetooth proxy has only three connection slots.",
+          "keep_connection": "Holds the BLE connection open between jobs, trading a proxy connection slot for a faster first print. Leave off unless you print often."
+        }
+      },
+      "bluetooth_confirm": {
+        "description": "Do you want to set up {name}?",
+        "data": {
+          "scan_interval": "Scan interval",
+          "keep_connection": "Keep BLE connection open"
+        },
+        "data_description": {
+          "scan_interval": "How often to read battery and status. Each poll opens a BLE connection, and an ESP32 Bluetooth proxy has only three connection slots.",
+          "keep_connection": "Holds the BLE connection open between jobs, trading a proxy connection slot for a faster first print. Leave off unless you print often."
+        }
+      },
+      "manual": {
+        "title": "Add a printer manually",
+        "description": "No printer was recognised by its Bluetooth name ({count} other devices are visible). Pick the device and tell Home Assistant which model it is — Marklife printers have no model-ID query, so the model cannot be detected once the name does not match.",
+        "data": {
+          "address": "Device",
+          "model": "Printer model",
+          "scan_interval": "Scan interval",
+          "keep_connection": "Keep BLE connection open"
+        },
+        "data_description": {
+          "address": "Choose from the visible Bluetooth devices, or type the address (for example AA:BB:CC:DD:EE:FF) if the printer is not listed.",
+          "model": "Pick the family your printer belongs to. The listed name prefixes show which models each profile covers.",
+          "scan_interval": "How often to read battery and status. Each poll opens a BLE connection, and an ESP32 Bluetooth proxy has only three connection slots.",
+          "keep_connection": "Holds the BLE connection open between jobs, trading a proxy connection slot for a faster first print. Leave off unless you print often."
+        }
+      }
+    },
+    "abort": {
+      "already_in_progress": "Configuration flow is already in progress",
+      "already_configured": "Device is already configured",
+      "not_supported": "This device does not look like a Marklife printer.",
+      "unsupported_transport": "This Marklife model uses Bluetooth Classic (SPP) or a proprietary transport. Home Assistant's Bluetooth stack and ESPHome Bluetooth proxies are BLE-only, so it cannot be controlled from Home Assistant.",
+      "cannot_connect": "Failed to connect",
+      "unknown": "Unexpected error"
+    },
+    "error": {
+      "invalid_address": "That is not a valid Bluetooth address."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "data": {
+          "scan_interval": "Scan interval",
+          "keep_connection": "Keep BLE connection open",
+          "tick_ms": "Packet interval (0 = use device default)",
+          "starvation_ms": "Credit starvation timeout",
+          "packet_size_cap": "Maximum packet size"
+        },
+        "data_description": {
+          "scan_interval": "How often to read battery and status. Each poll opens a BLE connection, and an ESP32 Bluetooth proxy has only three connection slots.",
+          "keep_connection": "Holds the BLE connection open between jobs, trading a proxy connection slot for a faster first print. Leave off unless you print often.",
+          "tick_ms": "Minimum gap between packets. Leave at 0 to use the value from the device profile — 30 ms for most models, 1 ms for M60/X2. Only raise this if prints come out banded.",
+          "starvation_ms": "How long to wait for a flow-control credit before forcing one through. Raise this first if labels print partially or stop midway; over a Bluetooth proxy the credit notification takes an extra network hop.",
+          "packet_size_cap": "Upper bound on packet size, whatever the printer's MTU says. Lower it if raising the starvation timeout did not help."
+        }
+      }
+    }
+  },
+  "services": {
+    "print": {
+      "name": "Print label",
+      "description": "Render a payload and print it on a Marklife label printer.",
+      "fields": {
+        "payload": {
+          "name": "Payload",
+          "description": "Payload describing what to draw."
+        },
+        "width": {
+          "name": "Width",
+          "description": "Canvas width in pixels. Defaults to the printer's print head width (384 dots on most models)."
+        },
+        "height": {
+          "name": "Height",
+          "description": "Canvas height in pixels."
+        },
+        "rotate": {
+          "name": "Rotate",
+          "description": "Label rotation (0, 90, 180, 270). Default: 0."
+        },
+        "density": {
+          "name": "Density",
+          "description": "Print darkness (1 to 3). Defaults to the device profile."
+        },
+        "paper_type": {
+          "name": "Paper type",
+          "description": "'gap' advances to the next die-cut label; 'continuous' feeds a fixed distance."
+        },
+        "copies": {
+          "name": "Copies",
+          "description": "How many identical labels to print."
+        },
+        "dither": {
+          "name": "Dither",
+          "description": "Apply dithering while rendering. Default: false."
+        },
+        "preview": {
+          "name": "Preview only",
+          "description": "Return the rendered label as a base64 data URL instead of printing it."
+        }
+      }
+    }
+  }
+}
