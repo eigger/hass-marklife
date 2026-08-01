@@ -21,7 +21,6 @@ BLE protocol layer ported from [tomLadder/thermoprint](https://github.com/tomLad
 
 - Found a bug? [Open an issue](https://github.com/eigger/hass-marklife/issues)
 - Questions or ideas? [Join the discussion](https://github.com/eigger/hass-marklife/discussions)
-- Have a printer to test with? Please say so in an issue — see [Reporting a test](#reporting-a-test)
 
 ---
 
