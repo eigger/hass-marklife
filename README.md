@@ -7,6 +7,12 @@
 
 Marklife Label Printer Home Assistant Integration
 
+## Gallery
+
+| P15 |
+| :---: |
+| <img src="https://raw.githubusercontent.com/eigger/hass-marklife/main/docs/images/p15.jpg" width="300" alt="Marklife P15"> |
+
 BLE protocol layer ported from [tomLadder/thermoprint](https://github.com/tomLadder/thermoprint) (MIT).
 
 
