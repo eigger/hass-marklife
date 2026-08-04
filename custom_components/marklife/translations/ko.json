@@ -107,10 +107,6 @@
           "name": "매수",
           "description": "동일한 라벨을 몇 장 인쇄할지 지정합니다."
         },
-        "dither": {
-          "name": "디더링",
-          "description": "렌더링 단계의 팔레트 디더 방법(none, floyd, atkinson, bayer8 등). true/false도 그대로 동작합니다(floyd/none). 기본값: none."
-        },
         "preview": {
           "name": "미리보기만",
           "description": "인쇄하지 않고 렌더링 결과를 base64 데이터 URL 로 반환합니다."
