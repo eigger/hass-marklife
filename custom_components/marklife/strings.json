@@ -109,7 +109,7 @@
         },
         "dither": {
           "name": "Dither",
-          "description": "Apply dithering while rendering. Default: false."
+          "description": "Palette dither method while rendering (none, floyd, atkinson, bayer8, …). Boolean true/false still work (floyd/none). Default: none."
         },
         "preview": {
           "name": "Preview only",
