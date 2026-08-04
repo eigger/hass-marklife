@@ -109,7 +109,7 @@
         },
         "dither": {
           "name": "디더링",
-          "description": "렌더링 단계에서 디더링을 적용합니다. 기본값 false."
+          "description": "렌더링 단계의 팔레트 디더 방법(none, floyd, atkinson, bayer8 등). true/false도 그대로 동작합니다(floyd/none). 기본값: none."
         },
         "preview": {
           "name": "미리보기만",

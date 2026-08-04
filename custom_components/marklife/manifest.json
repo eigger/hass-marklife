@@ -7,7 +7,7 @@
   "documentation": "https://www.github.com/eigger/hass-marklife",
   "issue_tracker": "https://www.github.com/eigger/hass-marklife/issues",
   "iot_class": "local_polling",
-  "requirements": ["imagespec[datamatrix]==0.3.1"],
+  "requirements": ["imagespec[datamatrix]==0.4.0"],
   "version": "0.1.0",
   "bluetooth": [
     { "local_name": "P15*" },
