@@ -145,6 +145,7 @@ the printer.
 | Element examples with preview images | [imagespec/docs/elements.md](https://github.com/eigger/imagespec/blob/main/docs/elements.md) |
 | All element fields & defaults | [imagespec README — Element Reference](https://github.com/eigger/imagespec#elements-reference) |
 | Layout, palette, LLM authoring guide | [imagespec/docs/authoring.md](https://github.com/eigger/imagespec/blob/main/docs/authoring.md) |
+| Dithering (per-element only) | [imagespec/docs/dithering.md](https://github.com/eigger/imagespec/blob/main/docs/dithering.md) |
 
 **Marklife-specific behaviour:**
 
@@ -155,7 +156,7 @@ the printer.
 - **Sizing in millimetres:** all these printers are 203 dpi, i.e. **8 dots per mm**. The 384-dot head is 48 mm wide.
 - **Default font:** `ppb.ttf` in `custom_components/marklife/fonts/`. Custom fonts also work from `www/fonts/`.
 - **`plot` element:** reads history from Home Assistant **Recorder**.
-- **`dither`:** service field or per-element key. Use `true`/`floyd` (or another method) to halftone photos/charts while rendering; `false`/`none` for flat nearest. Keep text and barcodes undithered — see [imagespec dithering docs](https://github.com/eigger/imagespec/blob/main/docs/dithering.md).
+- **Dithering:** not a service option. Put `dither` on **photos and charts** in the payload — `dlimg`, `pie`, `diagram`, `plot`, `sparkline`, `progress_bar`, `gauge` — when they use off-palette colors. Leave text/QR/barcodes without `dither`. See [dithering.md](https://github.com/eigger/imagespec/blob/main/docs/dithering.md).
 - **Layout:** prefer `row` / `column` / `stack` over hand-calculated coordinates.
 
 ---
@@ -173,7 +174,6 @@ the printer.
 | `density` | no | profile default | Print darkness 1–3 |
 | `paper_type` | no | `gap` | `gap` advances to the next die-cut label; `continuous` feeds a fixed distance |
 | `copies` | no | `1` | Number of identical labels |
-| `dither` | no | `none` / `false` | Palette dither method (`none`, `floyd`, `atkinson`, `bayer8`, …). `true` ≡ `floyd`. |
 | `preview` | no | `false` | Render only; do not send to the printer |
 
 Use `response_variable` in scripts to receive the generated image as a `data:`
@@ -207,6 +207,50 @@ data:
       height: 80
   width: 384
   height: 96
+```
+
+### Per-element dither (photos / charts)
+
+Do **not** dither the whole label. Add `dither` on chart/media elements that use
+off-palette colors (`dlimg`, `pie`, `diagram`, `plot`, `sparkline`,
+`progress_bar`, `gauge`):
+
+```yaml
+action: marklife.print
+target:
+  device_id: <your device>
+data:
+  payload:
+    - type: text
+      value: Product
+      font: ppb.ttf
+      x: 10
+      y: 8
+      size: 28
+    - type: dlimg
+      url: "https://example.com/photo.jpg"
+      x: 10
+      y: 40
+      xsize: 120
+      ysize: 90
+      dither: floyd
+    - type: pie
+      x: 150
+      y: 40
+      radius: 40
+      values: "A,40,orange;B,60,blue"
+      dither: atkinson
+    - type: diagram
+      x: 250
+      y: 40
+      width: 120
+      height: 90
+      bars:
+        values: "Mon,10;Tue,25;Wed,15;Thu,30"
+        color: orange
+      dither: bayer8
+  width: 384
+  height: 200
 ```
 
 ### 40 × 12 mm gap label (P15 default media)
