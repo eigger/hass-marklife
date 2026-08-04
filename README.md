@@ -145,6 +145,7 @@ the printer.
 | Element examples with preview images | [imagespec/docs/elements.md](https://github.com/eigger/imagespec/blob/main/docs/elements.md) |
 | All element fields & defaults | [imagespec README — Element Reference](https://github.com/eigger/imagespec#elements-reference) |
 | Layout, palette, LLM authoring guide | [imagespec/docs/authoring.md](https://github.com/eigger/imagespec/blob/main/docs/authoring.md) |
+| Dithering (per-element only) | [imagespec/docs/dithering.md](https://github.com/eigger/imagespec/blob/main/docs/dithering.md) |
 
 **Marklife-specific behaviour:**
 
@@ -155,7 +156,7 @@ the printer.
 - **Sizing in millimetres:** all these printers are 203 dpi, i.e. **8 dots per mm**. The 384-dot head is 48 mm wide.
 - **Default font:** `ppb.ttf` in `custom_components/marklife/fonts/`. Custom fonts also work from `www/fonts/`.
 - **`plot` element:** reads history from Home Assistant **Recorder**.
-- **`dither`:** set on photos/charts in the **payload** (e.g. `dlimg` / `pie` with `dither: floyd`). There is no service-level dither — whole-label dither blurs text and barcodes. See [imagespec dithering docs](https://github.com/eigger/imagespec/blob/main/docs/dithering.md).
+- **Dithering:** not a service option. Put `dither` on individual payload elements that need it (photos, charts). Leave text/QR/barcodes without `dither`. See [dithering.md](https://github.com/eigger/imagespec/blob/main/docs/dithering.md).
 - **Layout:** prefer `row` / `column` / `stack` over hand-calculated coordinates.
 
 ---
@@ -206,6 +207,39 @@ data:
       height: 80
   width: 384
   height: 96
+```
+
+### Per-element dither (photos / charts)
+
+Do **not** dither the whole label. Add `dither` only on elements that benefit:
+
+```yaml
+action: marklife.print
+target:
+  device_id: <your device>
+data:
+  payload:
+    - type: text
+      value: Product
+      font: ppb.ttf
+      x: 10
+      y: 10
+      size: 28
+    - type: dlimg
+      url: "https://example.com/photo.jpg"
+      x: 10
+      y: 50
+      xsize: 180
+      ysize: 120
+      dither: floyd   # or atkinson, bayer8, …
+    - type: pie
+      x: 210
+      y: 50
+      radius: 40
+      values: "A,40,orange;B,60,blue"
+      dither: atkinson
+  width: 384
+  height: 200
 ```
 
 ### 40 × 12 mm gap label (P15 default media)
