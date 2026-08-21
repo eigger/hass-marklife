@@ -1,14 +1,9 @@
 {
   "domain": "marklife",
   "name": "Marklife",
-  "codeowners": ["@eigger"],
-  "config_flow": true,
-  "dependencies": ["bluetooth_adapters"],
-  "documentation": "https://www.github.com/eigger/hass-marklife",
-  "issue_tracker": "https://www.github.com/eigger/hass-marklife/issues",
-  "iot_class": "local_polling",
-  "requirements": ["imagespec[datamatrix]==0.4.0"],
-  "version": "0.2.1",
+  "after_dependencies": [
+    "recorder"
+  ],
   "bluetooth": [
     { "local_name": "P15*" },
     { "local_name": "P12*" },
@@ -38,5 +33,19 @@
     { "local_name": "T3-*" },
     { "local_name": "T3_*" },
     { "local_name": "ewtto ET-*" }
-  ]
+  ],
+  "codeowners": [
+    "@eigger"
+  ],
+  "config_flow": true,
+  "dependencies": [
+    "bluetooth_adapters"
+  ],
+  "documentation": "https://github.com/eigger/hass-marklife",
+  "iot_class": "local_polling",
+  "issue_tracker": "https://github.com/eigger/hass-marklife/issues",
+  "requirements": [
+    "imagespec[datamatrix]==0.4.0"
+  ],
+  "version": "0.2.2"
 }
