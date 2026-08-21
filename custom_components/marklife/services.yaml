@@ -1,6 +1,6 @@
 print:
   target:
-    device:
+    entity:
       integration: marklife
   fields:
     payload:
