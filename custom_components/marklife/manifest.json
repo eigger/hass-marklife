@@ -47,5 +47,5 @@
   "requirements": [
     "imagespec[datamatrix]>=1.0.0"
   ],
-  "version": "0.2.2"
+  "version": "0.2.3"
 }
