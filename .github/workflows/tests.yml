@@ -47,6 +47,18 @@ jobs:
           pip install pytest pytest-asyncio bleak
           python -c "import json; print('\n'.join(json.load(open('custom_components/marklife/manifest.json'))['requirements']))" > requirements.txt
           pip install -r requirements.txt
+          # Exercise the minimum imagespec version declared by the manifest.
+          IMAGESPEC_MIN_VERSION="$(python - <<'PY'
+          import json
+          requirements = json.load(open("custom_components/marklife/manifest.json"))["requirements"]
+          requirement = next(req for req in requirements if req.startswith("imagespec[datamatrix]"))
+          operator, version = requirement.rsplit(">=", 1)
+          assert operator == "imagespec[datamatrix]", requirement
+          print(version)
+          PY
+          )"
+          pip install --force-reinstall "imagespec[datamatrix]==${IMAGESPEC_MIN_VERSION}"
+          IMAGESPEC_MIN_VERSION="$IMAGESPEC_MIN_VERSION" python -c "from importlib.metadata import version; import os; assert version('imagespec') == os.environ['IMAGESPEC_MIN_VERSION']"
 
       - name: Run tests
         run: |
