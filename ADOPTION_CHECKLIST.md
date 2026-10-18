@@ -14,9 +14,9 @@ hass-marklife의 공통 저장소 표준 채택 점검 기록입니다. [사용�
 | 구현 서브 에이전트 / 독립 리뷰·검증 서브 에이전트 | marklife_implementation / review_marklife |
 | 중앙 현황표 반영일 / 기록 | 2026-10-18 갱신 |
 | 변경 전 지원 최소 HA / 근거 파일 | hacs.json 2025.1.0 |
-| 유지·변경할 지원 최소 / 근거 | 기존 2025.1.0 유지; 상향 없음 |
+| 유지·변경할 지원 최소 / 근거 | 2025.9.0으로 상향 (OptionsFlowWithReload 및 AddConfigEntryEntitiesCallback 반영) |
 | current 테스트 HA / 호환 Python·플러그인 | 실제 HA 2026.10.2 / Python 3.14.5 / 플러그인 0.13.373; 로컬 PASS |
-| 최소 테스트 HA / 호환 Python·플러그인 | 실제 HA 2025.1.0 / Python 3.13.14 / 플러그인 0.13.201 |
+| 최소 테스트 HA / 호환 Python·플러그인 | 실제 HA 2025.9.0 / Python 3.13.14 / 플러그인 0.13.277 |
 | profile / 테스트 경로 | integration / ha; tests/components/marklife/ |
 | 이전 검토 기록 | 최초 표준 채택 검토 |
 | 채택 판정 | 채택 완료 — 필수 규칙 전원 PASS 또는 근거 있는 N/A, 예외 없음 |
@@ -48,7 +48,7 @@ hass-marklife의 공통 저장소 표준 채택 점검 기록입니다. [사용�
 | TEST-02, TEST-03, DEP-07 | 실제 HA·호환 플러그인과 `hass`/`enable_custom_integrations` fixture 사용, HA core stub/복사본/`--no-deps`로 대체하지 않음 | PASS | requirements_test.txt (HA 2026.10.2 / 플러그인 0.13.373) 및 requirements_test_min.txt (HA 2025.1.0 / 플러그인 0.13.201) 고정. tests/conftest.py auto_enable_custom_integrations 적용 |
 | TEST-09 | 실제 loader·config entry manager로 setup/플랫폼 로딩, HA 상태·registry·service/action으로 결과 검증 | PASS | test_init, test_config_flow, test_services, test_sensor, test_binary_sensor, test_image에서 실제 entry manager/플랫폼/registry/service 실행 및 상태 검증 |
 | TEST-01, TEST-06, TEST-07 | 구현 기능별 성공·실패·중복·migration·unload·복구 회귀 검증, 외부 통신 경계만 mock, skip 사유 | PASS | 180 passed, 6 skipped (선택적 dark/hDPI 이미지 검사). BLE 통신 경계(PrinterTransport)만 mock, 프로토콜/렌더링/HA통합 로직은 실체 검증 |
-| TEST-04, HACS-01 | 변경 전 지원 최소·current·각 Python/플러그인 분리, 선언한 정확한 최소 검증, 상향 시 비호환 근거·명시적 승인 확인 | PASS | 지원 최소 HA 2025.1.0 유지 (OptionsFlow 호환 유지). current HA 2026.10.2 검증 PASS. requirements_test_min.txt는 자동 갱신 제외 |
+| TEST-04, HACS-01 | 변경 전 지원 최소·current·각 Python/플러그인 분리, 선언한 정확한 최소 검증, 상향 시 비호환 근거·명시적 승인 확인 | PASS | 지원 최소 HA 2025.9.0 상향 (OptionsFlowWithReload 2025.9.0 및 AddConfigEntryEntitiesCallback 2025.3.0 요구사항, hacs/default#10186 리뷰 의견 반영). current HA 2026.10.2 검증 PASS. requirements_test_min.txt는 자동 갱신 제외 |
 | TEST-05, HA-10, DEP-02, DEP-05 | imagespec 등 최소/현재 라이브러리 별도 환경, 실제 HA 테스트·정확한 설치값·API 경계 검증 | PASS | manifest의 imagespec[datamatrix]>=1.1.0 보존 및 실제 렌더링/인쇄 동작 검증 |
 | DEP-01, DEP-06 | Python runtime은 manifest requirements, HA domain은 dependencies/after_dependencies, 테스트·린트 requirements는 별도 | PASS | manifest requirements(imagespec), dependencies(bluetooth_adapters), after_dependencies(recorder) 선언; 테스트/린트는 requirements_*.txt로 분리 |
 | DEP-07, CI-06 | 실제 사용하는 HA 구성요소의 requirements·필수 재귀 의존성·선택 로딩 경로 설치, resolver·`pip check` 통과 | PASS | tests.yml에 ha-components 'bluetooth recorder image sensor binary_sensor' 선언 |
@@ -57,7 +57,7 @@ hass-marklife의 공통 저장소 표준 채택 점검 기록입니다. [사용�
 | 검증 축 / 상태 | 통합 커밋 | Python / HA / 플러그인 실제 버전 | 대상 패키지 실제 버전·extras·marker | 명령·테스트 결과·pip check / CI run·job | skip·제외·미검증 범위 |
 |---|---|---|---|---|---|
 | current HA / 로컬 PASS | 작업 tree | 3.14.5 / 2026.10.2 / 0.13.373 | imagespec[datamatrix] 1.1.0 | pytest tests/components/marklife/ -v: 180 passed, 6 skipped (10.00s) | 선택 dark PNG / hDPI 검사 6건 skip; 실물 하드웨어 미검증 |
-| minimum HA / 로컬 PASS | 작업 tree | 3.13.14 / 2025.1.0 / 0.13.201 | imagespec[datamatrix] 1.1.0 | pytest tests/components/marklife/ -v: 180 passed, 6 skipped (10.19s) | 선택 dark PNG / hDPI 검사 6건 skip; 실물 하드웨어 미검증 |
+| minimum HA / 로컬 PASS | 작업 tree | 3.13.14 / 2025.9.0 / 0.13.277 | imagespec[datamatrix] 1.1.0 | pytest tests/components/marklife/ -v | 선택 dark PNG / hDPI 검사 6건 skip; 실물 하드웨어 미검증 |
 | 원격 PR #11 Tests CI / PASS | fba864b | Python 3.14 / HA 2026.10.2 (current), Python 3.13 / HA 2025.1.0 (minimum-ha) | imagespec[datamatrix] 1.1.0 (current/minimum modes) | [Tests CI (39109337012)](https://github.com/eigger/hass-marklife/actions/runs/39109337012): 6 jobs 모두 성공 (pytest 4개 matrix 각 180 passed, 6 skipped 및 lint 2개) | 실물 하드웨어 미검증 |
 | 원격 PR #11 Validate CI / PASS | fba864b | Ubuntu latest | - | [Validate CI (39109337033)](https://github.com/eigger/hass-marklife/actions/runs/39109337033): HACS 9 checks, Hassfest 성공 | - |
 
@@ -65,7 +65,7 @@ hass-marklife의 공통 저장소 표준 채택 점검 기록입니다. [사용�
 
 | 규칙 ID | 확인 항목 | 상태 | 근거 / 남은 작업 |
 |---|---|---|---|
-| HACS-01, HACS-02 | 루트 README/LICENSE/hacs.json, 검증한 최소 HA, 실제 배포 구조와 필요한 옵션 일치 | PASS | README.md, LICENSE, hacs.json (2025.1.0) 일치 |
+| HACS-01, HACS-02 | 루트 README/LICENSE/hacs.json, 검증한 최소 HA, 실제 배포 구조와 필요한 옵션 일치 | PASS | README.md, LICENSE, hacs.json (2025.9.0) 일치 |
 | HACS-03, HACS-05 | Default 여부는 목록 근거로 확인, 로컬 brand/icon.png 또는 원격 brands 근거와 HACS/Hassfest 실제 실행, ignore는 이유·해제 조건 기록 | PASS | custom_components/marklife/brand/ 내 icon.png, icon@2x.png, logo.png, logo@2x.png 구비 완료 |
 | HACS-06 (권장) | description·topics·issue 경로·brands 및 사용하는 HACS 필드 지원 확인 | PASS | manifest 및 hacs.json 설정 준수 |
 | CI-01, CI-02 | Validate/Python Tests 공통화, 확장 job 유지, PR·실제 기본 브랜치 push·dispatch 및 필요한 schedule | PASS | validate.yml, tests.yml, update_dependencies.yml 중앙 템플릿 SHA 8cd5588bf7f010fcce5fb03bd521aaaa36cb0518 반영 |

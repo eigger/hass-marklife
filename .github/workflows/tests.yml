@@ -31,7 +31,7 @@ jobs:
       python-versions: '["3.13"]'
       lint-python-version: '3.14'
       requirements: requirements_test_min.txt
-      expected-ha-version: '2025.1.0'
+      expected-ha-version: '2025.9.0'
       test-profile: ha
       ha-components: 'bluetooth recorder image sensor binary_sensor'
       dependency-modes: '["current", "minimum"]'

@@ -15,10 +15,10 @@ This integration is distributed as a HACS custom integration via `custom_compone
 
 | Scope | Python | Home Assistant | pytest-homeassistant-custom-component | Declaration |
 |---|---|---|---|---|
-| Historical Support Baseline | 3.13 | 2025.1.0 | 0.13.201 | `hacs.json`, `requirements_test_min.txt` |
+| Historical Support Baseline | 3.13 | 2025.9.0 | 0.13.277 | `hacs.json`, `requirements_test_min.txt` |
 | Current Testing Target | 3.14 | 2026.10.2 | 0.13.373 | `requirements_test.txt` |
 
-The historical minimum support baseline (`2025.1.0`) is preserved and separated from the current testing target. `requirements_test_min.txt` is excluded from automated dependency updates to prevent accidental version drift.
+The declared minimum support baseline (`2025.9.0`) reflects the requirements of `OptionsFlowWithReload` and `AddConfigEntryEntitiesCallback`. `requirements_test_min.txt` is excluded from automated dependency updates to prevent accidental version drift.
 
 ## Running Tests Locally
 
