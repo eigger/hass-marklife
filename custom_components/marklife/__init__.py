@@ -166,15 +166,8 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
                 hass.data.pop(PRINT_LOCK, None)
         raise
 
-    entry.async_on_unload(entry.add_update_listener(_async_update_options))
-
     _async_register_print_service(hass)
     return True
-
-
-async def _async_update_options(hass: HomeAssistant, entry: ConfigEntry) -> None:
-    """Reload options using the public API available at the supported HA floor."""
-    await hass.config_entries.async_reload(entry.entry_id)
 
 
 def _async_register_print_service(hass: HomeAssistant) -> None:

@@ -10,9 +10,9 @@
 - 중앙 현황 갱신일: 2026-10-18
 - 테스트 경로: `tests/components/marklife/`
 - 변경 전 지원 최소: `hacs.json.homeassistant=2025.1.0`
-- 적용 후 지원 최소: **2025.1.0 유지**. 최신 테스트와 지원 하한을 분리하며 임의 상향하지 않음
+- 적용 후 지원 최소: **2025.9.0 상향**. OptionsFlowWithReload(2025.9.0) 및 AddConfigEntryEntitiesCallback(2025.3.0) API 요구사항 반영 (hacs/default#10186 리뷰 의견 수용)
 - current 테스트 목표: Python 3.14 / HA 2026.10.2 / pytest-homeassistant-custom-component 0.13.373
-- 정확한 최소 HA 목표: Python 3.13 / HA 2025.1.0 / 플러그인 0.13.201
+- 정확한 최소 HA 목표: Python 3.13 / HA 2025.9.0 / 플러그인 0.13.277
 - 정확한 최소 외부 라이브러리: imagespec 1.1.0; latest 해결값과 별도 검증
 
 ## 채택 범위와 사용자 영향

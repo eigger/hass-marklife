@@ -3,7 +3,7 @@
 <!-- hass-standards:badges:start -->
 [![HACS Custom](https://img.shields.io/badge/HACS-Custom-41BDF5?style=flat-square)](#installation)
 [![Release](https://img.shields.io/github/v/release/eigger/hass-marklife?style=flat-square)](https://github.com/eigger/hass-marklife/releases)
-[![Home Assistant minimum](https://img.shields.io/badge/HA-%E2%89%A5%202025.1.0-41BDF5?style=flat-square)](hacs.json)
+[![Home Assistant minimum](https://img.shields.io/badge/HA-%E2%89%A5%202025.9.0-41BDF5?style=flat-square)](hacs.json)
 [![Tests](https://img.shields.io/github/actions/workflow/status/eigger/hass-marklife/tests.yml?branch=main&style=flat-square&label=Tests)](https://github.com/eigger/hass-marklife/actions/workflows/tests.yml)
 [![Validate](https://img.shields.io/github/actions/workflow/status/eigger/hass-marklife/validate.yml?branch=main&style=flat-square&label=Validate)](https://github.com/eigger/hass-marklife/actions/workflows/validate.yml)
 [![License](https://img.shields.io/github/license/eigger/hass-marklife?style=flat-square)](LICENSE)
@@ -29,7 +29,7 @@ A HACS custom integration for Marklife Bluetooth thermal label printers (such as
 
 ## Requirements
 
-- Home Assistant **2025.1.0** or newer.
+- Home Assistant **2025.9.0** or newer.
 - A functional Bluetooth adapter or [ESPHome Bluetooth proxy](https://github.com/eigger/hass-repo-standards/blob/main/docs/bluetooth.md) with active connections enabled (`bluetooth_proxy: active: true`).
 - A supported Marklife BLE printer. Disconnect vendor mobile apps before printing.
 

@@ -3,7 +3,7 @@
 <!-- hass-standards:badges:start -->
 [![HACS Custom](https://img.shields.io/badge/HACS-Custom-41BDF5?style=flat-square)](#설치)
 [![Release](https://img.shields.io/github/v/release/eigger/hass-marklife?style=flat-square)](https://github.com/eigger/hass-marklife/releases)
-[![Home Assistant minimum](https://img.shields.io/badge/HA-%E2%89%A5%202025.1.0-41BDF5?style=flat-square)](hacs.json)
+[![Home Assistant minimum](https://img.shields.io/badge/HA-%E2%89%A5%202025.9.0-41BDF5?style=flat-square)](hacs.json)
 [![Tests](https://img.shields.io/github/actions/workflow/status/eigger/hass-marklife/tests.yml?branch=main&style=flat-square&label=Tests)](https://github.com/eigger/hass-marklife/actions/workflows/tests.yml)
 [![Validate](https://img.shields.io/github/actions/workflow/status/eigger/hass-marklife/validate.yml?branch=main&style=flat-square&label=Validate)](https://github.com/eigger/hass-marklife/actions/workflows/validate.yml)
 [![License](https://img.shields.io/github/license/eigger/hass-marklife?style=flat-square)](LICENSE)
@@ -29,7 +29,7 @@ Home Assistant의 자체 블루투스 스택 및 ESPHome 블루투스 프록시�
 
 ## 요구사항
 
-- Home Assistant **2025.1.0** 이상.
+- Home Assistant **2025.9.0** 이상.
 - 동작 가능한 블루투스 어댑터 또는 활성 연결이 켜진 [ESPHome 블루투스 프록시](https://github.com/eigger/hass-repo-standards/blob/main/docs/bluetooth.ko.md) (`bluetooth_proxy: active: true`).
 - 지원되는 Marklife BLE 라벨 프린터 (인쇄 전 스마트폰 앱 연결 해제 필요).
 
