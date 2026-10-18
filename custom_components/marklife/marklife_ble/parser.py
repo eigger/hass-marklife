@@ -84,7 +84,9 @@ class MarklifeDevice:
         self._print_start: float | None = None
         self._print_end: float | None = None
 
-    def add_connection_listener(self, listener: Callable[[], None]) -> Callable[[], None]:
+    def add_connection_listener(
+        self, listener: Callable[[], None]
+    ) -> Callable[[], None]:
         """Subscribe to connect/disconnect. Returns an unsubscribe callable."""
         self._connection_listeners.add(listener)
         return lambda: self._connection_listeners.discard(listener)
@@ -155,7 +157,9 @@ class MarklifeDevice:
                 f"No Marklife profile matches the BLE name {ble_device.name!r}",
             )
         if not profile.supported:
-            raise UnsupportedDeviceError(ble_device.name or profile.model_id, profile.unsupported_reason)
+            raise UnsupportedDeviceError(
+                ble_device.name or profile.model_id, profile.unsupported_reason
+            )
 
         self.profile = profile
         self.ble_data.model_id = profile.model_id
@@ -175,11 +179,15 @@ class MarklifeDevice:
             use_services_cache=False,
         )
         if not self.client.is_connected:
-            raise MarklifeError(ErrorCode.NOT_CONNECTED, "Could not connect to the printer")
+            raise MarklifeError(
+                ErrorCode.NOT_CONNECTED, "Could not connect to the printer"
+            )
         self._notify_connection()
         return self.client
 
-    def _make_client(self, client: BleakClient, profile: DeviceProfile) -> MarklifeClient:
+    def _make_client(
+        self, client: BleakClient, profile: DeviceProfile
+    ) -> MarklifeClient:
         return MarklifeClient(
             client,
             profile,
@@ -219,17 +227,26 @@ class MarklifeDevice:
                 # Identity values never change; read each one once.
                 if not self.ble_data.model:
                     self.ble_data.model = (
-                        await printer.get_info(InfoKind.MODEL) or profile.model_id.upper()
+                        await printer.get_info(InfoKind.MODEL)
+                        or profile.model_id.upper()
                     )
                 if not self.ble_data.sw_version:
-                    self.ble_data.sw_version = await printer.get_info(InfoKind.FIRMWARE) or ""
+                    self.ble_data.sw_version = (
+                        await printer.get_info(InfoKind.FIRMWARE) or ""
+                    )
                 if not self.ble_data.serial_number:
-                    self.ble_data.serial_number = await printer.get_info(InfoKind.SERIAL) or ""
+                    self.ble_data.serial_number = (
+                        await printer.get_info(InfoKind.SERIAL) or ""
+                    )
                 if not self.ble_data.mac:
                     self.ble_data.mac = await printer.get_info(InfoKind.MAC) or ""
 
-                self.ble_data.sensors["battery"] = await printer.get_battery()
-                self.ble_data.sensors["status"] = await printer.get_status()
+                battery = await printer.get_battery()
+                if battery is not None:
+                    self.ble_data.sensors["battery"] = battery
+                status = await printer.get_status()
+                if status is not None:
+                    self.ble_data.sensors["status"] = status
             finally:
                 # Unsubscribe even when the poll failed part way through: with
                 # keep_connection on, a live handler would otherwise survive into

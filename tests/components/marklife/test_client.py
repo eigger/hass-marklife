@@ -11,16 +11,27 @@ import asyncio
 import pytest
 from PIL import Image
 
-from marklife_ble.client import MarklifeClient, _split_at_bulk
-from marklife_ble.errors import ErrorCode, MarklifeError, PrinterError
-from marklife_ble.imaging import to_raster
-from marklife_ble.models import (
+from custom_components.marklife.marklife_ble.client import (
+    MarklifeClient,
+    _split_at_bulk,
+)
+from custom_components.marklife.marklife_ble.errors import (
+    ErrorCode,
+    MarklifeError,
+    PrinterError,
+)
+from custom_components.marklife.marklife_ble.imaging import to_raster
+from custom_components.marklife.marklife_ble.models import (
     CHAR_CX_PRIMARY,
     CHAR_RX_PRIMARY,
     CHAR_TX_PRIMARY,
     get_profile,
 )
-from marklife_ble.protocols import PrintOptions, get_protocol
+from custom_components.marklife.marklife_ble.protocols import (
+    InfoKind,
+    PrintOptions,
+    get_protocol,
+)
 
 
 class FakeServices:
@@ -47,7 +58,9 @@ class FakeBleakClient:
     async def stop_notify(self, uuid: str) -> None:
         self._handlers.pop(uuid, None)
 
-    async def write_gatt_char(self, uuid: str, data: bytes, response: bool = True) -> None:
+    async def write_gatt_char(
+        self, uuid: str, data: bytes, response: bool = True
+    ) -> None:
         assert uuid == CHAR_TX_PRIMARY
         assert response is False, "TX must use write-without-response"
         self.writes.append(bytes(data))
@@ -136,15 +149,14 @@ def test_confirmation_during_the_send_is_not_lost(bitmap):
     installed. With the waiter registered afterwards, that notification lands
     with nobody listening and a successful print becomes a 30 s timeout.
     """
+
     async def run():
         printer, fake = await _connected(get_profile("p15"))
         # Confirm as early as possible: right after the very first packet.
         fake.on_write = lambda n: (
             fake.fire(CHAR_RX_PRIMARY, b"\xaa") if n == 1 else None
         )
-        await asyncio.wait_for(
-            printer.print_bitmap(bitmap, PrintOptions(density=2)), 5
-        )
+        await asyncio.wait_for(printer.print_bitmap(bitmap, PrintOptions(density=2)), 5)
 
     asyncio.run(run())
 
@@ -166,12 +178,11 @@ def test_fault_during_printing_raises(bitmap):
 
 def test_disconnect_after_send_counts_as_success(bitmap):
     """Some models power down as soon as the job finishes."""
+
     async def run():
         printer, fake = await _connected(get_profile("p15"))
         fake.on_write = lambda n: setattr(fake, "is_connected", False)
-        await asyncio.wait_for(
-            printer.print_bitmap(bitmap, PrintOptions(density=2)), 5
-        )
+        await asyncio.wait_for(printer.print_bitmap(bitmap, PrintOptions(density=2)), 5)
 
     asyncio.run(run())
 
@@ -209,8 +220,6 @@ def test_packet_size_cap_beats_a_larger_mtu(bitmap):
 
 def test_queries_are_refused_while_printing(bitmap):
     async def run():
-        from marklife_ble.protocols import InfoKind
-
         printer, fake = await _connected(get_profile("p15"))
         task = asyncio.create_task(
             printer.print_bitmap(bitmap, PrintOptions(density=2))
@@ -226,9 +235,8 @@ def test_queries_are_refused_while_printing(bitmap):
 
 def test_identity_query_falls_back_to_raw_payload():
     """The printer answers identity queries with a bare payload, no prefix."""
-    async def run():
-        from marklife_ble.protocols import InfoKind
 
+    async def run():
         printer, fake = await _connected(get_profile("p15"))
         task = asyncio.create_task(printer.get_info(InfoKind.MODEL))
         await asyncio.sleep(0.05)
@@ -269,9 +277,7 @@ def test_copies_replay_the_whole_session(bitmap):
         # Each copy registers its waiter before its first byte, so the first
         # write of a copy resolves that copy; the rest land with no waiter.
         fake.on_write = lambda _n: fake.fire(CHAR_RX_PRIMARY, b"\xaa")
-        await asyncio.wait_for(
-            printer.print_bitmap(bitmap, options, copies=2), 10
-        )
+        await asyncio.wait_for(printer.print_bitmap(bitmap, options, copies=2), 10)
 
         preamble, bulk = _split_at_bulk(
             get_protocol("l11").build_print_sequence(bitmap, profile, options)
@@ -288,6 +294,7 @@ def test_stop_unsubscribes_after_a_partial_start():
     ride the same connection into the next poll, and re-subscribing the same
     characteristic then fails.
     """
+
     class FlakyClient(FakeBleakClient):
         async def start_notify(self, uuid: str, handler) -> None:
             if uuid == CHAR_CX_PRIMARY:

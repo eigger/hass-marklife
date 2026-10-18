@@ -208,7 +208,9 @@ class MarklifeClient:
             return None
         if isinstance(response.value, str) and response.value:
             return response.value
-        text = response.raw.decode("ascii", errors="replace").replace("\x00", "").strip()
+        text = (
+            response.raw.decode("ascii", errors="replace").replace("\x00", "").strip()
+        )
         return text or None
 
     async def _query(self, kind: str, command: Command) -> Response | None:
@@ -233,7 +235,9 @@ class MarklifeClient:
     def _on_rx(self, _sender: object, data: bytearray) -> None:
         payload = bytes(data)
         response = self._protocol.parse_response(payload)
-        _LOGGER.debug("RX %s -> %s", payload.hex(":"), response.kind if response else "?")
+        _LOGGER.debug(
+            "RX %s -> %s", payload.hex(":"), response.kind if response else "?"
+        )
 
         if response is not None:
             if response.kind == "status" and isinstance(response.value, str):
@@ -255,7 +259,9 @@ class MarklifeClient:
     def _on_cx(self, _sender: object, data: bytearray) -> None:
         payload = bytes(data)
         response = self._protocol.parse_response(payload)
-        _LOGGER.debug("CX %s -> %s", payload.hex(":"), response.kind if response else "?")
+        _LOGGER.debug(
+            "CX %s -> %s", payload.hex(":"), response.kind if response else "?"
+        )
         if response is None:
             return
 

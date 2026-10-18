@@ -1,0 +1,17 @@
+{
+  "repository": "eigger/hass-marklife",
+  "default_branch": "main",
+  "domain": "marklife",
+  "hacs": "custom",
+  "release": true,
+  "readmes": [
+    "README.md",
+    "README.ko.md"
+  ],
+  "tests_workflow": "tests.yml",
+  "validate_workflow": "validate.yml",
+  "installation_links": {
+    "README.md": "#installation",
+    "README.ko.md": "#\uc124\uce58"
+  }
+}

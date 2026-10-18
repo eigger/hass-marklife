@@ -29,7 +29,8 @@ from homeassistant.exceptions import (
     HomeAssistantError,
     ServiceValidationError,
 )
-from homeassistant.helpers import device_registry as dr, entity_registry as er
+from homeassistant.helpers import device_registry as dr
+from homeassistant.helpers import entity_registry as er
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 
 from .const import (
@@ -47,6 +48,7 @@ from .const import (
     EMPTY_PNG,
     PRINT_LOCK,
     ImageAndBLEData,
+    redact_addresses,
 )
 from .marklife_ble import BLEData, MarklifeDevice, MarklifeError
 from .render import render_image
@@ -70,7 +72,9 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     assert address is not None
 
     scan_interval = float(_option(entry, CONF_SCAN_INTERVAL, DEFAULT_SCAN_INTERVAL))
-    keep_connection = bool(_option(entry, CONF_KEEP_CONNECTION, DEFAULT_KEEP_CONNECTION))
+    keep_connection = bool(
+        _option(entry, CONF_KEEP_CONNECTION, DEFAULT_KEEP_CONNECTION)
+    )
     tick_ms = int(_option(entry, CONF_TICK_MS, DEFAULT_TICK_MS))
     starvation_ms = int(_option(entry, CONF_STARVATION_MS, DEFAULT_STARVATION_MS))
     packet_size_cap = int(_option(entry, CONF_PACKET_SIZE_CAP, DEFAULT_PACKET_SIZE_CAP))
@@ -92,17 +96,18 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     async def _async_update_method() -> BLEData:
         ble_device = bluetooth.async_ble_device_from_address(hass, address)
         if ble_device is None:
-            _LOGGER.warning(
-                "Marklife printer %s is not currently visible; keeping last known data",
-                address,
+            _LOGGER.debug(
+                "Marklife printer is not currently visible; keeping last known data"
             )
             return device.ble_data
 
         try:
             return await device.update_device(ble_device)
         except Exception as err:  # noqa: BLE001 - never let polling kill the entry
-            _LOGGER.warning(
-                "Unable to poll %s: %s; keeping last known data", address, err
+            _LOGGER.debug(
+                "Unable to poll %s: %s; keeping last known data",
+                redact_addresses(address),
+                redact_addresses(str(err)),
             )
             return device.ble_data
 
@@ -114,33 +119,62 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         update_interval=timedelta(seconds=scan_interval),
     )
     coordinator.data = device.ble_data
-    await coordinator.async_refresh()
-    if not coordinator.last_update_success:
-        _LOGGER.warning(
-            "Initial update failed for %s; entities start unavailable: %s",
-            address,
-            coordinator.last_exception,
+    try:
+        await coordinator.async_refresh()
+        if not coordinator.last_update_success:
+            _LOGGER.warning(
+                "Initial update failed for %s; entities start unavailable: %s",
+                redact_addresses(address),
+                redact_addresses(str(coordinator.last_exception)),
+            )
+
+        image_coordinator: DataUpdateCoordinator[ImageAndBLEData] = (
+            DataUpdateCoordinator(
+                hass,
+                _LOGGER,
+                name=DOMAIN,
+            )
+        )
+        image_coordinator.async_set_updated_data(
+            (Image(content_type="image/png", content=EMPTY_PNG), coordinator.data)
         )
 
-    image_coordinator: DataUpdateCoordinator[ImageAndBLEData] = DataUpdateCoordinator(
-        hass,
-        _LOGGER,
-        name=DOMAIN,
-    )
-    image_coordinator.async_set_updated_data(
-        (Image(content_type="image/png", content=EMPTY_PNG), coordinator.data)
-    )
+        hass.data[DOMAIN][entry.entry_id] = {
+            "coordinator": coordinator,
+            "image_coordinator": image_coordinator,
+            "device": device,
+        }
 
-    hass.data[DOMAIN][entry.entry_id] = {
-        "coordinator": coordinator,
-        "image_coordinator": image_coordinator,
-        "device": device,
-    }
+        await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
+    except BaseException:
+        try:
+            await hass.config_entries.async_unload_platforms(entry, PLATFORMS)
+        except Exception as err:  # noqa: BLE001 - preserve the setup failure
+            _LOGGER.debug(
+                "Unable to roll back printer platforms: %s", redact_addresses(str(err))
+            )
+        finally:
+            hass.data.get(DOMAIN, {}).pop(entry.entry_id, None)
+            try:
+                await device.disconnect()
+            except Exception as err:  # noqa: BLE001 - preserve the setup failure
+                _LOGGER.debug(
+                    "Unable to disconnect printer on rollback: %s",
+                    redact_addresses(str(err)),
+                )
+            if not hass.data.get(DOMAIN):
+                hass.data.pop(PRINT_LOCK, None)
+        raise
 
-    await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
+    entry.async_on_unload(entry.add_update_listener(_async_update_options))
 
     _async_register_print_service(hass)
     return True
+
+
+async def _async_update_options(hass: HomeAssistant, entry: ConfigEntry) -> None:
+    """Reload options using the public API available at the supported HA floor."""
+    await hass.config_entries.async_reload(entry.entry_id)
 
 
 def _async_register_print_service(hass: HomeAssistant) -> None:
@@ -206,7 +240,7 @@ async def _print_on_entry(
     ble_device = bluetooth.async_ble_device_from_address(hass, device.address)
     if ble_device is None:
         raise HomeAssistantError(
-            f"Could not find printer {device.address} on your Bluetooth network"
+            f"Could not find printer {redact_addresses(device.address)} on your Bluetooth network"
         )
 
     # Serialise the BLE half domain-wide, not just per printer. Two printers
@@ -219,7 +253,9 @@ async def _print_on_entry(
             result = await device.print_image(
                 ble_device,
                 image,
-                density=int(service.data["density"]) if "density" in service.data else None,
+                density=int(service.data["density"])
+                if "density" in service.data
+                else None,
                 paper_type=service.data.get("paper_type", "gap"),
                 copies=int(service.data.get("copies", 1)),
             )

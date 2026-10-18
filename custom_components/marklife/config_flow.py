@@ -15,7 +15,7 @@ from homeassistant.components.bluetooth import (
 from homeassistant.config_entries import (
     ConfigFlow,
     ConfigFlowResult,
-    OptionsFlowWithReload,
+    OptionsFlow,
 )
 from homeassistant.const import CONF_ADDRESS, CONF_SCAN_INTERVAL
 from homeassistant.core import callback
@@ -75,7 +75,10 @@ def _model_selector() -> SelectSelector:
 SETUP_SCHEMA = {
     vol.Required(CONF_SCAN_INTERVAL, default=DEFAULT_SCAN_INTERVAL): NumberSelector(
         NumberSelectorConfig(
-            min=30, max=9999, step=1, mode=NumberSelectorMode.BOX,
+            min=30,
+            max=9999,
+            step=1,
+            mode=NumberSelectorMode.BOX,
             unit_of_measurement="seconds",
         )
     ),
@@ -90,19 +93,28 @@ SETUP_SCHEMA = {
 TUNING_SCHEMA = {
     vol.Required(CONF_TICK_MS, default=DEFAULT_TICK_MS): NumberSelector(
         NumberSelectorConfig(
-            min=0, max=200, step=1, mode=NumberSelectorMode.BOX,
+            min=0,
+            max=200,
+            step=1,
+            mode=NumberSelectorMode.BOX,
             unit_of_measurement="milliseconds",
         )
     ),
     vol.Required(CONF_STARVATION_MS, default=DEFAULT_STARVATION_MS): NumberSelector(
         NumberSelectorConfig(
-            min=500, max=10000, step=100, mode=NumberSelectorMode.BOX,
+            min=500,
+            max=10000,
+            step=100,
+            mode=NumberSelectorMode.BOX,
             unit_of_measurement="milliseconds",
         )
     ),
     vol.Required(CONF_PACKET_SIZE_CAP, default=DEFAULT_PACKET_SIZE_CAP): NumberSelector(
         NumberSelectorConfig(
-            min=20, max=237, step=1, mode=NumberSelectorMode.BOX,
+            min=20,
+            max=237,
+            step=1,
+            mode=NumberSelectorMode.BOX,
             unit_of_measurement="bytes",
         )
     ),
@@ -316,7 +328,7 @@ class MarklifeConfigFlow(ConfigFlow, domain=DOMAIN):
         return OptionsFlowHandler()
 
 
-class OptionsFlowHandler(OptionsFlowWithReload):
+class OptionsFlowHandler(OptionsFlow):
     """Handle option updates."""
 
     async def async_step_init(

@@ -15,7 +15,7 @@ from __future__ import annotations
 
 import pytest
 
-from marklife_ble.models import (
+from custom_components.marklife.marklife_ble.models import (
     SERVICE_ALT,
     SERVICE_PRIMARY,
     advertisement_contradicts,
@@ -35,7 +35,8 @@ def test_matching_uuid_corroborates():
 def test_uuid_comparison_ignores_case():
     """Advertisement data casing varies by backend; the manifest requires lowercase."""
     assert (
-        advertisement_contradicts(get_profile("p15"), [SERVICE_PRIMARY.upper()]) is False
+        advertisement_contradicts(get_profile("p15"), [SERVICE_PRIMARY.upper()])
+        is False
     )
 
 
@@ -73,7 +74,9 @@ def test_generic_prefix_collision_is_the_case_this_guards():
     It resolves to the P15 profile by name alone, and only the advertised
     service UUIDs distinguish it from a real printer.
     """
-    from marklife_ble.models import find_profile_by_name
+    from custom_components.marklife.marklife_ble.models import (
+        find_profile_by_name,
+    )
 
     profile = find_profile_by_name("M1-2200")
     assert profile is not None and profile.model_id == "p15"

@@ -24,10 +24,10 @@ from pathlib import Path
 
 import pytest
 
-from marklife_ble.models import find_profile_by_name
+from custom_components.marklife.marklife_ble.models import find_profile_by_name
 
 MANIFEST_PATH = (
-    Path(__file__).resolve().parents[1]
+    Path(__file__).resolve().parents[3]
     / "custom_components"
     / "marklife"
     / "manifest.json"
@@ -134,7 +134,9 @@ def test_every_matcher_resolves_to_a_supported_profile(matchers):
         sample = pattern.replace("*", "0042")
         profile = find_profile_by_name(sample)
         assert profile is not None, f"{pattern} matches no device profile"
-        assert profile.supported, f"{pattern} maps to unsupported profile {profile.model_id}"
+        assert profile.supported, (
+            f"{pattern} maps to unsupported profile {profile.model_id}"
+        )
 
 
 @pytest.mark.parametrize(

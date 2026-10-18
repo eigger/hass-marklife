@@ -106,7 +106,9 @@ class L11Protocol(BleQueryMixin, Protocol):
     ) -> list[Command]:
         commands: list[Command] = []
 
-        density = options.density if options.density is not None else profile.defaults.density
+        density = (
+            options.density if options.density is not None else profile.defaults.density
+        )
         if density is not None:
             value = profile.map_density(density)
             commands.append(
