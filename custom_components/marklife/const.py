@@ -3,10 +3,22 @@
 from __future__ import annotations
 
 import base64
+import re
 
 from homeassistant.components.image import Image
 
 from .marklife_ble import BLEData
+
+_ADDRESS = re.compile(
+    r"(?<![0-9a-f])(?:[0-9a-f]{2}[:_-]){5}[0-9a-f]{2}(?![0-9a-f])",
+    re.IGNORECASE,
+)
+
+
+def redact_addresses(value: str) -> str:
+    """Remove full Bluetooth addresses, including BlueZ device paths."""
+    return _ADDRESS.sub("**REDACTED**", value)
+
 
 DOMAIN = "marklife"
 

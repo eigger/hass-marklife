@@ -15,13 +15,15 @@ import pytest
 from PIL import Image
 
 BRAND_DIR = (
-    Path(__file__).resolve().parents[1]
-    / "custom_components"
-    / "marklife"
-    / "brand"
+    Path(__file__).resolve().parents[3] / "custom_components" / "marklife" / "brand"
 )
 
-ICON_SIZES = {"icon.png": 256, "dark_icon.png": 256, "icon@2x.png": 512, "dark_icon@2x.png": 512}
+ICON_SIZES = {
+    "icon.png": 256,
+    "dark_icon.png": 256,
+    "icon@2x.png": 512,
+    "dark_icon@2x.png": 512,
+}
 LOGO_BOUNDS = {
     "logo.png": (128, 256),
     "dark_logo.png": (128, 256),

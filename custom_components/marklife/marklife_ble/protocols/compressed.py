@@ -36,6 +36,7 @@ if TYPE_CHECKING:
 _ZLIB_LEVEL = 6
 _ZLIB_WBITS = 14
 
+
 def wakeup() -> Command:
     """6 zero bytes (shorter than the L11 wakeup)."""
     return Command("wakeup", bytes(6))
@@ -120,7 +121,9 @@ class CompressedProtocol(BleQueryMixin, Protocol):
         if gap:
             commands.append(set_paper_type_gap())
 
-        density = options.density if options.density is not None else profile.defaults.density
+        density = (
+            options.density if options.density is not None else profile.defaults.density
+        )
         if density is not None:
             commands.append(set_density(profile.map_density(density)))
 
@@ -128,8 +131,12 @@ class CompressedProtocol(BleQueryMixin, Protocol):
         commands.append(start_job())
         commands.append(adjust_position_auto(0x51) if gap else feed_dots(100))
         commands.append(print_bitmap(bitmap))
-        commands.append(printer_location(0x20, 0x00) if gap else printer_location(0x00, 0x00))
+        commands.append(
+            printer_location(0x20, 0x00) if gap else printer_location(0x00, 0x00)
+        )
         commands.append(stop_job())
-        commands.append(adjust_position_auto(0x50) if gap else adjust_position_auto(0x00))
+        commands.append(
+            adjust_position_auto(0x50) if gap else adjust_position_auto(0x00)
+        )
 
         return commands

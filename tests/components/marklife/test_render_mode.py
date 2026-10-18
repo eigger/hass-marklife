@@ -28,10 +28,7 @@ from pathlib import Path
 from PIL import Image, ImageDraw
 
 RENDER_PY = (
-    Path(__file__).resolve().parents[1]
-    / "custom_components"
-    / "marklife"
-    / "render.py"
+    Path(__file__).resolve().parents[3] / "custom_components" / "marklife" / "render.py"
 )
 
 

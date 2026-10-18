@@ -16,11 +16,14 @@ import zlib
 import pytest
 from PIL import Image
 
-from marklife_ble.client import _split_at_bulk
-from marklife_ble.flow import CreditFlowController
-from marklife_ble.imaging import fit_to_printhead, to_raster
-from marklife_ble.models import find_profile_by_name, get_profile
-from marklife_ble.protocols import PrintOptions, get_protocol
+from custom_components.marklife.marklife_ble.client import _split_at_bulk
+from custom_components.marklife.marklife_ble.flow import CreditFlowController
+from custom_components.marklife.marklife_ble.imaging import fit_to_printhead, to_raster
+from custom_components.marklife.marklife_ble.models import (
+    find_profile_by_name,
+    get_profile,
+)
+from custom_components.marklife.marklife_ble.protocols import PrintOptions, get_protocol
 
 
 @pytest.fixture
@@ -130,7 +133,12 @@ def test_l11_print_sequence(raster):
         raster, get_profile("p15"), PrintOptions(density=2, paper_type="gap")
     )
     assert [c.label for c in seq] == [
-        "set-thickness", "wakeup", "enable", "print-bitmap", "position-to-gap", "stop"
+        "set-thickness",
+        "wakeup",
+        "enable",
+        "print-bitmap",
+        "position-to-gap",
+        "stop",
     ]
     assert seq[0].data.hex() == "10ff100002"  # P15 uses thickness, not density
     assert len(seq[1].data) == 15
@@ -151,11 +159,13 @@ def test_l11_raster_header_is_gs_v_0_little_endian(raster):
 
 def test_l11_paper_type_changes_the_trailing_feed(raster):
     l11 = get_protocol("l11")
-    gap = l11.build_print_sequence(raster, get_profile("p15"), PrintOptions(paper_type="gap"))
+    gap = l11.build_print_sequence(
+        raster, get_profile("p15"), PrintOptions(paper_type="gap")
+    )
     cont = l11.build_print_sequence(
         raster, get_profile("p15"), PrintOptions(paper_type="continuous")
     )
-    assert gap[4].data.hex() == "1d0c"    # position to gap
+    assert gap[4].data.hex() == "1d0c"  # position to gap
     assert cont[4].data.hex() == "1b4a64"  # feed 100 dots
 
 
@@ -181,12 +191,19 @@ def test_compressed_print_sequence_matches_the_documented_p50_order(raster):
         raster, get_profile("m60"), PrintOptions(density=2, paper_type="gap")
     )
     assert [c.label for c in seq] == [
-        "set-paper-type", "set-density", "wakeup", "start-job", "adjust-position",
-        "print-bitmap", "printer-location", "stop-job", "adjust-position",
+        "set-paper-type",
+        "set-density",
+        "wakeup",
+        "start-job",
+        "adjust-position",
+        "print-bitmap",
+        "printer-location",
+        "stop-job",
+        "adjust-position",
     ]
     assert seq[0].data.hex() == "1f800220"
     assert seq[1].data.hex() == "1f700208"  # M60 remaps density 2 -> 8
-    assert len(seq[2].data) == 6            # shorter wakeup than L11
+    assert len(seq[2].data) == 6  # shorter wakeup than L11
     assert seq[3].data.hex() == "1fc00100"
     assert seq[4].data.hex() == "1f1151"
     assert seq[6].data.hex() == "1f122000"
@@ -226,8 +243,13 @@ def test_credit_and_mtu_notifications():
 
 @pytest.mark.parametrize(
     ("code", "status"),
-    [(0x01, "out_of_paper"), (0x02, "cover_open"), (0x03, "overheating"),
-     (0x04, "low_battery"), (0x05, "cover_closed")],
+    [
+        (0x01, "out_of_paper"),
+        (0x02, "cover_open"),
+        (0x03, "overheating"),
+        (0x04, "low_battery"),
+        (0x05, "cover_closed"),
+    ],
 )
 def test_status_codes(code, status):
     response = get_protocol("l11").parse_response(bytes((0xFF, code)))
@@ -258,9 +280,9 @@ def test_split_puts_raster_and_trailing_commands_in_one_stream(raster):
         raster, get_profile("p15"), PrintOptions(density=2)
     )
     preamble, bulk = _split_at_bulk(seq)
-    assert len(preamble) == 5 + 15 + 4       # thickness + wakeup + enable
-    assert bulk[:3].hex() == "1d7630"        # starts at the raster
-    assert bulk[-4:].hex() == "10fff145"     # ends with stop, no stall before it
+    assert len(preamble) == 5 + 15 + 4  # thickness + wakeup + enable
+    assert bulk[:3].hex() == "1d7630"  # starts at the raster
+    assert bulk[-4:].hex() == "10fff145"  # ends with stop, no stall before it
 
 
 # ------------------------------------------------------------ flow control

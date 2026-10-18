@@ -1,65 +1,38 @@
 name: Tests
-
 on:
   push:
-    branches: [main, master]
+    branches: [main]
   pull_request:
-
+  workflow_dispatch:
+  schedule:
+    - cron: "23 4 * * 1"
+permissions:
+  contents: read
 concurrency:
-  group: tests-${{ github.ref }}
+  group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
-
 jobs:
-  lint:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v5
-
-      - name: Set up Python
-        uses: actions/setup-python@v6
-        with:
-          python-version: "3.13"
-
-      - name: Install ruff
-        run: pip install ruff
-
-      - name: Lint
-        run: python -m ruff check custom_components/ tests/
-
-  test:
-    runs-on: ubuntu-latest
-    needs: lint
-    strategy:
-      fail-fast: false
-      matrix:
-        python-version: ["3.13", "3.14"]
-    steps:
-      - uses: actions/checkout@v5
-
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v6
-        with:
-          python-version: ${{ matrix.python-version }}
-
-      - name: Install dependencies
-        run: |
-          pip install --upgrade pip
-          pip install pytest pytest-asyncio bleak
-          python -c "import json; print('\n'.join(json.load(open('custom_components/marklife/manifest.json'))['requirements']))" > requirements.txt
-          pip install -r requirements.txt
-          # Exercise the minimum imagespec version declared by the manifest.
-          IMAGESPEC_MIN_VERSION="$(python - <<'PY'
-          import json
-          requirements = json.load(open("custom_components/marklife/manifest.json"))["requirements"]
-          requirement = next(req for req in requirements if req.startswith("imagespec[datamatrix]"))
-          operator, version = requirement.rsplit(">=", 1)
-          assert operator == "imagespec[datamatrix]", requirement
-          print(version)
-          PY
-          )"
-          pip install --force-reinstall "imagespec[datamatrix]==${IMAGESPEC_MIN_VERSION}"
-          IMAGESPEC_MIN_VERSION="$IMAGESPEC_MIN_VERSION" python -c "from importlib.metadata import version; import os; assert version('imagespec') == os.environ['IMAGESPEC_MIN_VERSION']"
-
-      - name: Run tests
-        run: |
-          python -m pytest tests/ -v
+  current:
+    uses: eigger/hass-repo-standards/.github/workflows/python-tests.yml@8cd5588bf7f010fcce5fb03bd521aaaa36cb0518 # reviewed standards commit
+    with:
+      domain: marklife
+      python-versions: '["3.14"]'
+      lint-python-version: '3.14'
+      requirements: requirements_test.txt
+      expected-ha-version: '2026.10.2'
+      test-profile: ha
+      ha-components: 'bluetooth recorder image sensor binary_sensor'
+      dependency-modes: '["current", "minimum"]'
+      minimum-packages: '["imagespec"]'
+  minimum-ha:
+    uses: eigger/hass-repo-standards/.github/workflows/python-tests.yml@8cd5588bf7f010fcce5fb03bd521aaaa36cb0518 # reviewed standards commit
+    with:
+      domain: marklife
+      python-versions: '["3.13"]'
+      lint-python-version: '3.14'
+      requirements: requirements_test_min.txt
+      expected-ha-version: '2025.1.0'
+      test-profile: ha
+      ha-components: 'bluetooth recorder image sensor binary_sensor'
+      dependency-modes: '["current", "minimum"]'
+      minimum-packages: '["imagespec"]'

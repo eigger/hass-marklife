@@ -11,9 +11,7 @@ from pathlib import Path
 
 import pytest
 
-COMPONENT_DIR = (
-    Path(__file__).resolve().parents[1] / "custom_components" / "marklife"
-)
+COMPONENT_DIR = Path(__file__).resolve().parents[3] / "custom_components" / "marklife"
 STRINGS = COMPONENT_DIR / "strings.json"
 TRANSLATIONS = sorted((COMPONENT_DIR / "translations").glob("*.json"))
 
@@ -105,4 +103,6 @@ def test_every_setup_field_explains_itself(path):
     for step, fields in load(path)["config"]["step"].items():
         described = fields.get("data_description", {})
         for field in SETUP_FIELDS:
-            assert described.get(field), f"'{field}' has no description in step '{step}'"
+            assert described.get(field), (
+                f"'{field}' has no description in step '{step}'"
+            )
