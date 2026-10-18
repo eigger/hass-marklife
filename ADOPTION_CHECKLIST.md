@@ -8,7 +8,7 @@ hass-marklife의 공통 저장소 표준 채택 점검 기록입니다. [사용�
 |---|---|
 | 통합 리포 / 실제 기본 브랜치 | eigger/hass-marklife / main |
 | domain / 구현 경로 | marklife / custom_components/marklife/ |
-| 검토 대상 통합 커밋 / 채택 PR | 채택 작업 진행 중; main 직접 반영 |
+| 검토 대상 통합 커밋 / 채택 PR | [PR #11](https://github.com/eigger/hass-marklife/pull/11) (head 커밋 `7dbd8c5` / 병합 대기) |
 | 검토한 표준 전체 커밋 SHA | 8cd5588bf7f010fcce5fb03bd521aaaa36cb0518 |
 | 검토일 / 조율 담당 | 2026-10-18 / root |
 | 구현 서브 에이전트 / 독립 리뷰·검증 서브 에이전트 | marklife_implementation / review_marklife |
@@ -58,7 +58,7 @@ hass-marklife의 공통 저장소 표준 채택 점검 기록입니다. [사용�
 |---|---|---|---|---|---|
 | current HA / 로컬 PASS | 작업 tree | 3.14.5 / 2026.10.2 / 0.13.373 | imagespec[datamatrix] 1.1.0 | pytest tests/components/marklife/ -v: 180 passed, 6 skipped (10.00s) | 선택 dark PNG / hDPI 검사 6건 skip; 실물 하드웨어 미검증 |
 | minimum HA / 로컬 PASS | 작업 tree | 3.13.14 / 2025.1.0 / 0.13.201 | imagespec[datamatrix] 1.1.0 | pytest tests/components/marklife/ -v: 180 passed, 6 skipped (10.19s) | 선택 dark PNG / hDPI 검사 6건 skip; 실물 하드웨어 미검증 |
-| 원격 PR #11 Tests CI / PASS | fba864b | Python 3.14 / HA 2026.10.2 (current), Python 3.13 / HA 2025.1.0 (minimum-ha) | imagespec[datamatrix] 1.1.0 (current/minimum modes) | [Tests CI (39109337012)](https://github.com/eigger/hass-marklife/actions/runs/39109337012): 6 jobs 모두 성공 (각 180 passed, 6 skipped) | 실물 하드웨어 미검증 |
+| 원격 PR #11 Tests CI / PASS | fba864b | Python 3.14 / HA 2026.10.2 (current), Python 3.13 / HA 2025.1.0 (minimum-ha) | imagespec[datamatrix] 1.1.0 (current/minimum modes) | [Tests CI (39109337012)](https://github.com/eigger/hass-marklife/actions/runs/39109337012): 6 jobs 모두 성공 (pytest 4개 matrix 각 180 passed, 6 skipped 및 lint 2개) | 실물 하드웨어 미검증 |
 | 원격 PR #11 Validate CI / PASS | fba864b | Ubuntu latest | - | [Validate CI (39109337033)](https://github.com/eigger/hass-marklife/actions/runs/39109337033): HACS 9 checks, Hassfest 성공 | - |
 
 ## HACS·CI·의존성 업데이트

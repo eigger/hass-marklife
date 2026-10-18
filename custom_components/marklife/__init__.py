@@ -155,7 +155,13 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
             )
         finally:
             hass.data.get(DOMAIN, {}).pop(entry.entry_id, None)
-            await device.disconnect()
+            try:
+                await device.disconnect()
+            except Exception as err:  # noqa: BLE001 - preserve the setup failure
+                _LOGGER.debug(
+                    "Unable to disconnect printer on rollback: %s",
+                    redact_addresses(str(err)),
+                )
             if not hass.data.get(DOMAIN):
                 hass.data.pop(PRINT_LOCK, None)
         raise
