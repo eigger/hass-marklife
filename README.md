@@ -14,6 +14,12 @@
 
 A HACS custom integration for Marklife Bluetooth thermal label printers (such as P15, P12, M60, P50, and compatible models) using Home Assistant's native Bluetooth stack and ESPHome Bluetooth proxies. Generates and prints declarative label layouts via [imagespec](https://github.com/eigger/imagespec).
 
+## Gallery
+
+| P15 |
+| :---: |
+| <img src="docs/images/p15.jpg" width="300" alt="Marklife P15"> |
+
 ## Supported Devices
 
 - **Tested & Verified**: **Marklife P15** (L11 protocol family, 384 px print head) with local Bluetooth adapters and ESPHome proxies.

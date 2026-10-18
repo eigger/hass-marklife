@@ -14,6 +14,12 @@
 
 Home Assistant의 자체 블루투스 스택 및 ESPHome 블루투스 프록시를 통해 Marklife 블루투스 감열 라벨 프린터(P15, P12, M60, P50 및 호환 모델)를 제어하고, [imagespec](https://github.com/eigger/imagespec) 선언형 레이아웃을 통해 라벨을 인쇄하는 HACS 커스텀 통합 구성요소입니다.
 
+## 갤러리
+
+| P15 |
+| :---: |
+| <img src="docs/images/p15.jpg" width="300" alt="Marklife P15"> |
+
 ## 지원 기기
 
 - **동작 검증 완료**: **Marklife P15** (L11 프로토콜 제품군, 384 px 헤드 폭) — 로컬 블루투스 어댑터 및 ESPHome 프록시 지원.
