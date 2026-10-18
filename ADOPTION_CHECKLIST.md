@@ -58,6 +58,8 @@ hass-marklife의 공통 저장소 표준 채택 점검 기록입니다. [사용�
 |---|---|---|---|---|---|
 | current HA / 로컬 PASS | 작업 tree | 3.14.5 / 2026.10.2 / 0.13.373 | imagespec[datamatrix] 1.1.0 | pytest tests/components/marklife/ -v: 180 passed, 6 skipped (10.00s) | 선택 dark PNG / hDPI 검사 6건 skip; 실물 하드웨어 미검증 |
 | minimum HA / 로컬 PASS | 작업 tree | 3.13.14 / 2025.1.0 / 0.13.201 | imagespec[datamatrix] 1.1.0 | pytest tests/components/marklife/ -v: 180 passed, 6 skipped (10.19s) | 선택 dark PNG / hDPI 검사 6건 skip; 실물 하드웨어 미검증 |
+| 원격 PR #11 Tests CI / PASS | fba864b | Python 3.14 / HA 2026.10.2 (current), Python 3.13 / HA 2025.1.0 (minimum-ha) | imagespec[datamatrix] 1.1.0 (current/minimum modes) | [Tests CI (39109337012)](https://github.com/eigger/hass-marklife/actions/runs/39109337012): 6 jobs 모두 성공 (각 180 passed, 6 skipped) | 실물 하드웨어 미검증 |
+| 원격 PR #11 Validate CI / PASS | fba864b | Ubuntu latest | - | [Validate CI (39109337033)](https://github.com/eigger/hass-marklife/actions/runs/39109337033): HACS 9 checks, Hassfest 성공 | - |
 
 ## HACS·CI·의존성 업데이트
 
