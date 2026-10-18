@@ -1,7 +1,7 @@
 # hass-marklife
 
 <!-- hass-standards:badges:start -->
-[![HACS Custom](https://img.shields.io/badge/HACS-Custom-41BDF5?style=flat-square)](#installation)
+[![HACS Default](https://img.shields.io/badge/HACS-Default-41BDF5?style=flat-square)](#installation)
 [![Release](https://img.shields.io/github/v/release/eigger/hass-marklife?style=flat-square)](https://github.com/eigger/hass-marklife/releases)
 [![Home Assistant minimum](https://img.shields.io/badge/HA-%E2%89%A5%202025.1.0-41BDF5?style=flat-square)](hacs.json)
 [![Tests](https://img.shields.io/github/actions/workflow/status/eigger/hass-marklife/tests.yml?branch=main&style=flat-square&label=Tests)](https://github.com/eigger/hass-marklife/actions/workflows/tests.yml)
@@ -35,7 +35,7 @@ A HACS custom integration for Marklife Bluetooth thermal label printers (such as
 
 ## Installation
 
-1. Add `https://github.com/eigger/hass-marklife` to **HACS → Integrations → Custom repositories** (category *Integration*), or copy `custom_components/marklife/` into your Home Assistant `custom_components/` directory.
+1. Search for **Marklife** in **HACS → Integrations** and download it, or copy `custom_components/marklife/` into your Home Assistant `custom_components/` directory.
 2. Restart Home Assistant.
 3. Open **Settings → Devices & services** and confirm the automatically discovered printer, or choose **Add integration → Marklife** (falls through to a manual address/model selection step if not automatically detected).
 

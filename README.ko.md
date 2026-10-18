@@ -1,7 +1,7 @@
 # hass-marklife
 
 <!-- hass-standards:badges:start -->
-[![HACS Custom](https://img.shields.io/badge/HACS-Custom-41BDF5?style=flat-square)](#설치)
+[![HACS Default](https://img.shields.io/badge/HACS-Default-41BDF5?style=flat-square)](#설치)
 [![Release](https://img.shields.io/github/v/release/eigger/hass-marklife?style=flat-square)](https://github.com/eigger/hass-marklife/releases)
 [![Home Assistant minimum](https://img.shields.io/badge/HA-%E2%89%A5%202025.1.0-41BDF5?style=flat-square)](hacs.json)
 [![Tests](https://img.shields.io/github/actions/workflow/status/eigger/hass-marklife/tests.yml?branch=main&style=flat-square&label=Tests)](https://github.com/eigger/hass-marklife/actions/workflows/tests.yml)
@@ -35,7 +35,7 @@ Home Assistant의 자체 블루투스 스택 및 ESPHome 블루투스 프록시�
 
 ## 설치
 
-1. **HACS → 통합(Integrations) → 커스텀 저장소(Custom repositories)**에 `https://github.com/eigger/hass-marklife` (카테고리: *Integration*)를 추가하거나, `custom_components/marklife/` 폴더를 Home Assistant의 `custom_components/` 디렉터리에 복사합니다.
+1. **HACS → 통합(Integrations)**에서 **Marklife**를 검색하여 다운로드하거나, `custom_components/marklife/` 폴더를 Home Assistant의 `custom_components/` 디렉터리에 복사합니다.
 2. Home Assistant를 다시 시작합니다.
 3. **설정 → 기기 및 서비스**에서 자동으로 검색된 프린터를 확인하거나, **통합 추가 → Marklife**를 선택합니다 (자동 검색이 되지 않는 경우 수동 주소/모델 선택 단계로 진행됩니다).
 

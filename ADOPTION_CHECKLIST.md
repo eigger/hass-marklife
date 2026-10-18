@@ -66,7 +66,7 @@ hass-marklife의 공통 저장소 표준 채택 점검 기록입니다. [사용�
 | 규칙 ID | 확인 항목 | 상태 | 근거 / 남은 작업 |
 |---|---|---|---|
 | HACS-01, HACS-02 | 루트 README/LICENSE/hacs.json, 검증한 최소 HA, 실제 배포 구조와 필요한 옵션 일치 | PASS | README.md, LICENSE, hacs.json (2025.1.0) 일치 |
-| HACS-03, HACS-05 | Default 여부는 목록 근거로 확인, 로컬 brand/icon.png 또는 원격 brands 근거와 HACS/Hassfest 실제 실행, ignore는 이유·해제 조건 기록 | PASS | custom_components/marklife/brand/ 내 icon.png, icon@2x.png, logo.png, logo@2x.png 구비 완료 |
+| HACS-03, HACS-05 | Default 여부는 목록 근거로 확인, 로컬 brand/icon.png 또는 원격 brands 근거와 HACS/Hassfest 실제 실행, ignore는 이유·해제 조건 기록 | PASS | HACS default 등재 완료([hacs/default#10186](https://github.com/hacs/default/pull/10186#issuecomment-6255590423), 2026-10-18), custom_components/marklife/brand/ 내 icon.png, icon@2x.png, logo.png, logo@2x.png 구비 완료 |
 | HACS-06 (권장) | description·topics·issue 경로·brands 및 사용하는 HACS 필드 지원 확인 | PASS | manifest 및 hacs.json 설정 준수 |
 | CI-01, CI-02 | Validate/Python Tests 공통화, 확장 job 유지, PR·실제 기본 브랜치 push·dispatch 및 필요한 schedule | PASS | validate.yml, tests.yml, update_dependencies.yml 중앙 템플릿 SHA 8cd5588bf7f010fcce5fb03bd521aaaa36cb0518 반영 |
 | CI-03, CI-05, CI-08 | 최소 권한·checkout 자격증명 비보존·timeout·concurrency, full SHA·갱신 관리, 비신뢰 입력·secrets 경계 | PASS | workflow 파일 permissions, persist-credentials: false, timeout 설정 준수 |
@@ -79,7 +79,7 @@ hass-marklife의 공통 저장소 표준 채택 점검 기록입니다. [사용�
 | 규칙 ID | 확인 항목 | 상태 | 근거 / 남은 작업 |
 |---|---|---|---|
 | DOC-01, DOC-02, DOC-06 | 영어 README.md·한국어 README.ko.md·상호 링크·기존 내용 보존, 간결한 시작/지원/요구/설치/예제/제한/문서목록, 상세 문서는 docs/로 분리 | PASS | README.md 및 README.ko.md 작성 및 상호 링크, 상세 내용은 docs/user-guide.md, docs/troubleshooting.md, docs/development.md로 체계적 분리 |
-| DOC-03, DOC-04, DOC-05 | 제목 아래 관리 블록, flat-square·순서·실제 조건별 배지, CI 실제 기본 브랜치, 필수 동적 Usage | PASS | sync_badges.py . --write 실행으로 HACS Custom, Release, HA >= 2025.1.0, Tests, Validate, License, Usage 배지 동기화 완료 |
+| DOC-03, DOC-04, DOC-05 | 제목 아래 관리 블록, flat-square·순서·실제 조건별 배지, CI 실제 기본 브랜치, 필수 동적 Usage | PASS | sync_badges.py . --write 실행으로 HACS Default, Release, HA >= 2025.1.0, Tests, Validate, License, Usage 배지 동기화 완료 |
 | HA-09, HA-10 | BLE 사용 시 HA Bluetooth API·라이브러리 공개 경계, 지원한 proxy 경로·재연결·취소·서비스 변경 검증 | PASS | BluetoothServiceInfoBleak, async_discovered_service_info, habluetooth 매니저 활용 및 tests/components/marklife/ 검증 |
 | DOC-07 | blesession/proxy 통합 README의 핵심조건·영어 기본/한국어 대응 사용자 설정 링크, 공통 Bluetooth 설정·추천기기 안내 | PASS | README 및 docs에서 중앙 Bluetooth 프록시 가이드(영어/한국어) 및 추천 기기(XIAO W5500, M5Stack AtomS3U) 안내 |
 | DOC-07, HA-12 | 기기별 깨우기·인증·타 앱 연결·전송 제약, 실제 검증 경로와 미검증 범위, 공개 문제 로그 비식별화 | PASS | 스마트폰 앱 연결 해제 필요성, 블루투스 클래식 미지원 고지, 문제 제보 시 주소 비식별화 가이드 수록 |

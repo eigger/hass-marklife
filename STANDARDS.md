@@ -27,7 +27,7 @@
 
 README의 P15 로컬 어댑터·ESPHome 프록시 확인은 기존 실물 확인 이력으로 보존합니다. 이번 작업은 새 실물 모델·프록시 보드·무선 성능·HA frontend UI 검증이 아닙니다. 공통 추천 기기·구매 링크는 중앙 Bluetooth 문서로 연결하고 모든 조합 검증을 주장하지 않습니다.
 
-원격 Issues와 Discussions는 모두 활성, LICENSE는 MIT이며 정식 release 0.2.3이 존재함을 확인했습니다. Default HACS 미등재 상태이므로 Custom 배지를 사용합니다. Usage는 원격 집계 사전 조회와 관계없이 추가합니다.
+원격 Issues와 Discussions는 모두 활성, LICENSE는 MIT이며 정식 release 0.2.3이 존재함을 확인했습니다. HACS 기본(default) 저장소에 등재되어([hacs/default#10186](https://github.com/hacs/default/pull/10186#issuecomment-6255590423), 2026-10-18 승인/머지) Default 배지를 사용합니다. Usage는 원격 집계 사전 조회와 관계없이 추가합니다.
 
 ## 예외
 

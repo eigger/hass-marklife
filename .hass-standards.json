@@ -2,7 +2,8 @@
   "repository": "eigger/hass-marklife",
   "default_branch": "main",
   "domain": "marklife",
-  "hacs": "custom",
+  "hacs": "default",
+  "hacs_default_evidence": "https://github.com/hacs/default/pull/10186#issuecomment-6255590423 (2026-10-18)",
   "release": true,
   "readmes": [
     "README.md",
