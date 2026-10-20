@@ -1,4 +1,4 @@
-# Shared standards; upstream action SHAs verified 2026-10-18.
+# Shared standards; upstream action SHAs verified 2026-10-17.
 name: Validate
 'on':
   push:
@@ -15,4 +15,19 @@ concurrency:
   cancel-in-progress: true
 jobs:
   validate:
-    uses: eigger/hass-repo-standards/.github/workflows/validate-integration.yml@8cd5588bf7f010fcce5fb03bd521aaaa36cb0518 # reviewed standards commit
+    uses: eigger/hass-repo-standards/.github/workflows/validate-integration.yml@648dad941a118c80325f44c7a13cb5b5b9c1c788 # reviewed standards commit
+    with:
+      # Reviewed Core source supports the official categories taxonomy.
+      hassfest-core-ref: ec18d8b25d1ee39aa8b85a72a170e42bee33228c
+  standards:
+    name: Central template compliance
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      with:
+        persist-credentials: false
+    - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7
+      with:
+        python-version: '3.14'
+    - uses: eigger/hass-repo-standards/actions/check-standards@648dad941a118c80325f44c7a13cb5b5b9c1c788 # reviewed standards commit

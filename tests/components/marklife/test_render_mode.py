@@ -22,29 +22,31 @@ integration, hence the guard: the modules are otherwise nearly identical.
 
 from __future__ import annotations
 
-import re
-from pathlib import Path
-
+from homeassistant.core import ServiceCall
 from PIL import Image, ImageDraw
 
-RENDER_PY = (
-    Path(__file__).resolve().parents[3] / "custom_components" / "marklife" / "render.py"
-)
+from custom_components.marklife.render import render_image
 
 
-def test_renderer_uses_image_rotation_mode():
-    source = RENDER_PY.read_text(encoding="utf-8")
-    match = re.search(r'rotate_mode\s*=\s*"([a-z]+)"', source)
-    assert match, "render.py does not set rotate_mode at all"
-    assert match.group(1) == "image", (
-        f'rotate_mode is "{match.group(1)}"; a label printer needs "image" so the '
-        "output dimensions swap on a 90 degree rotation"
+def test_renderer_uses_image_rotation_mode(hass):
+    """Exercise the real integration renderer, including imagespec rotation."""
+    service = ServiceCall(
+        hass,
+        "marklife",
+        "print",
+        {"payload": [], "width": 320, "height": 96, "rotate": 90},
     )
+    assert render_image("entry", service, hass).size == (96, 320)
 
 
-def test_rotate_is_passed_through_to_imagespec():
-    source = RENDER_PY.read_text(encoding="utf-8")
-    assert 'service.data.get("rotate"' in source
+def test_rotate_is_passed_through_to_imagespec(hass):
+    service = ServiceCall(
+        hass,
+        "marklife",
+        "print",
+        {"payload": [], "width": 320, "height": 96, "rotate": 0},
+    )
+    assert render_image("entry", service, hass).size == (320, 96)
 
 
 def test_image_mode_swaps_dimensions_but_canvas_mode_does_not():

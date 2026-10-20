@@ -24,23 +24,49 @@ The declared minimum support baseline (`2025.9.0`) reflects the requirements of 
 
 ### Current Environment (Python 3.14 / HA 2026.10.2)
 
+Resolve each environment with the central environment installer. It preserves manifest extras and constraints when resolving the actual HA component dependencies:
+
 ```bash
 python3.14 -m venv .venv
-source .venv/bin/activate
-pip install -r requirements_test.txt imagespec
-pytest tests/components/marklife/ -v
-pip check
+.venv/bin/python -m pip install packaging==26.3
+export STANDARDS_CHECKOUT=/path/to/reviewed/hass-repo-standards
+export RUNNER_TEMP="$(mktemp -d)"
+INPUT_DOMAIN=marklife \
+INPUT_REQUIREMENTS=requirements_test.txt \
+INPUT_TEST_PROFILE=ha \
+INPUT_EXPECTED_HA_VERSION=2026.10.2 \
+INPUT_HA_COMPONENTS="bluetooth recorder image sensor binary_sensor" \
+INPUT_DEPENDENCY_MODE=minimum \
+INPUT_MINIMUM_PACKAGES='["imagespec"]' \
+.venv/bin/python "$STANDARDS_CHECKOUT/actions/python-environment/install.py"
 ```
 
-### Minimum HA Environment (Python 3.13 / HA 2025.1.0)
+For current renderer coverage set `INPUT_DEPENDENCY_MODE=current`. Keep each resolved combination in a separate environment. For exact minimum imagespec coverage, constrain `imagespec==1.1.0` together with the original `imagespec[datamatrix]>=1.1.0` manifest requirement in the same resolver run. Never replace the renderer after resolving an environment.
+
+### Minimum HA Environment (Python 3.13 / HA 2025.9.0)
+
+Create a Python 3.13 environment such as `.venv-min`, use its Python in the command above, and change `INPUT_REQUIREMENTS` to `requirements_test_min.txt` and `INPUT_EXPECTED_HA_VERSION` to `2025.9.0`. Preserve its pinned HA, plugin and pycares baseline. The workflow tests both current and exact minimum imagespec in each HA environment.
+
+### Payload Contract and Regression Tests
+
+After resolving either environment, run the required contract first with that environment's Python (use `.venv-min/bin/python` for minimum HA):
 
 ```bash
-python3.13 -m venv .venv-min
-source .venv-min/bin/activate
-pip install -r requirements_test_min.txt imagespec
-pytest tests/components/marklife/ -v
-pip check
+export STANDARDS_CHECKOUT=/path/to/reviewed/hass-repo-standards
+export PAYLOAD_REPOSITORY="$PWD"
+export PAYLOAD_DOMAIN=marklife
+export PYTHONPATH="$STANDARDS_CHECKOUT/scripts${PYTHONPATH:+:$PYTHONPATH}"
+.venv/bin/python -m pip check
+.venv/bin/python -m pytest -p hass_standards_payload tests/components/marklife/test_payload_examples.py -v
 ```
+
+Only after the contract succeeds, run the ordinary suite excluding its managed scaffold:
+
+```bash
+.venv/bin/python -m pytest tests/components/marklife/ --ignore=tests/components/marklife/test_payload_examples.py -v
+```
+
+The contract loads the real integration and validates complete action YAML through Home Assistant, comparing production rendering with installed imagespec output. It never dispatches the print action. Example templates use the real fixture's battery state and local bundled font.
 
 ### Linting and Formatting
 

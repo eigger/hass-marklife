@@ -8,6 +8,7 @@ import io
 import logging
 from datetime import timedelta
 
+import voluptuous as vol
 from bleak_retry_connector import close_stale_connections_by_address
 from homeassistant.components import bluetooth
 from homeassistant.components.image import Image
@@ -52,6 +53,22 @@ from .const import (
 )
 from .marklife_ble import BLEData, MarklifeDevice, MarklifeError
 from .render import render_image
+
+# Keep unrecognized fields available to existing callers while validating the
+# payload container and fields consumed directly by the printer action.
+PRINT_SCHEMA = vol.Schema(
+    {
+        vol.Required("payload"): vol.Any(list, str),
+        vol.Optional("width"): vol.All(vol.Coerce(int), vol.Range(min=1)),
+        vol.Optional("height"): vol.All(vol.Coerce(int), vol.Range(min=1)),
+        vol.Optional("rotate"): vol.Coerce(int),
+        vol.Optional("density"): vol.Coerce(int),
+        vol.Optional("copies"): vol.Coerce(int),
+        vol.Optional("paper_type"): str,
+        vol.Optional("preview"): bool,
+    },
+    extra=vol.ALLOW_EXTRA,
+)
 
 PLATFORMS: list[Platform] = [Platform.SENSOR, Platform.IMAGE, Platform.BINARY_SENSOR]
 
@@ -192,7 +209,11 @@ def _async_register_print_service(hass: HomeAssistant) -> None:
         return {"results": results}
 
     hass.services.async_register(
-        DOMAIN, "print", print_service, supports_response=SupportsResponse.OPTIONAL
+        DOMAIN,
+        "print",
+        print_service,
+        schema=PRINT_SCHEMA,
+        supports_response=SupportsResponse.OPTIONAL,
     )
 
 

@@ -11,8 +11,9 @@ jobs:
     permissions:
       contents: write
       pull-requests: write
-    uses: eigger/hass-repo-standards/.github/workflows/dependency-update.yml@8cd5588bf7f010fcce5fb03bd521aaaa36cb0518 # reviewed standards commit
+    uses: eigger/hass-repo-standards/.github/workflows/dependency-update.yml@648dad941a118c80325f44c7a13cb5b5b9c1c788 # reviewed standards commit
     with:
+      standards-ref: 648dad941a118c80325f44c7a13cb5b5b9c1c788
       domain: marklife
       packages: '["imagespec"]'
       python-version: '3.14'

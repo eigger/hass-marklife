@@ -1,0 +1,14 @@
+action: marklife.print
+target:
+  device_id: "{{ device_id('sensor.p15_0000_ddeeff_battery') }}"
+data:
+  preview: true
+  width: 384
+  height: 96
+  payload:
+    - type: text
+      value: "Battery {{ states('sensor.p15_0000_ddeeff_battery') }}%"
+      font: ppb.ttf
+      x: 10
+      y: 10
+      size: 30

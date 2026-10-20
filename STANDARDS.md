@@ -1,42 +1,43 @@
 # 적용한 공통 규칙
 
-- 표준: https://github.com/eigger/hass-repo-standards/tree/8cd5588bf7f010fcce5fb03bd521aaaa36cb0518
-- 참조 커밋 SHA: `8cd5588bf7f010fcce5fb03bd521aaaa36cb0518`
-- 채택 검토일: 2026-10-18
+- 표준: https://github.com/eigger/hass-repo-standards/tree/648dad941a118c80325f44c7a13cb5b5b9c1c788
+- 참조 커밋 SHA: `648dad941a118c80325f44c7a13cb5b5b9c1c788`
+- 이전 기준: `8cd5588bf7f010fcce5fb03bd521aaaa36cb0518`, 최초 채택 PR [#11](https://github.com/eigger/hass-marklife/pull/11), main `7149585`
+- 재검토일: 2026-10-20
 - profile: integration / ha; domain `marklife`, 실제 기본 브랜치 `main`
+- 검토 대상: main `9bd640b`에서 시작한 [PR #14](https://github.com/eigger/hass-marklife/pull/14) (구현 `d344942`)
 - 적용 점검표: [ADOPTION_CHECKLIST.md](ADOPTION_CHECKLIST.md)
 - 중앙 현황: https://github.com/eigger/hass-repo-standards/blob/main/docs/adoption-status.md
-- 담당: 조율 `/root`, 구현 `/root/marklife_implementation`(코드·테스트·CI·문서), 독립 리뷰·검증 `/root/review_marklife`
-- 중앙 현황 갱신일: 2026-10-18
+- 담당: 조율 `/root`, 구현 `/root/implementation`, 독립 리뷰·검증 `/root/review`
+- 중앙 현황 갱신일: 2026-10-20 (로컬 행 갱신, 원격 미반영)
 - 테스트 경로: `tests/components/marklife/`
-- 변경 전 지원 최소: `hacs.json.homeassistant=2025.1.0`
-- 적용 후 지원 최소: **2025.9.0 상향**. OptionsFlowWithReload(2025.9.0) 및 AddConfigEntryEntitiesCallback(2025.3.0) API 요구사항 반영 (hacs/default#10186 리뷰 의견 수용)
-- current 테스트 목표: Python 3.14 / HA 2026.10.2 / pytest-homeassistant-custom-component 0.13.373
-- 정확한 최소 HA 목표: Python 3.13 / HA 2025.9.0 / 플러그인 0.13.277
-- 정확한 최소 외부 라이브러리: imagespec 1.1.0; latest 해결값과 별도 검증
+- 변경 전 / 후 지원 최소 HA: **2025.9.0 유지**, `hacs.json` 및 `requirements_test_min.txt` 기준. 이전 상향은 [PR #13](https://github.com/eigger/hass-marklife/pull/13), main `9bd640b`에서 이미 반영됨.
+- current 테스트: Python 3.14 / HA 2026.10.2 / pytest-homeassistant-custom-component 0.13.373
+- 정확한 최소 HA 테스트: Python 3.13 / HA 2025.9.0 / 플러그인 0.13.277
+- 외부 라이브러리: `imagespec[datamatrix]>=1.1.0`, current 해결값과 정확한 하한을 검증하며 지원 하한을 변경하지 않음
 
 ## 채택 범위와 사용자 영향
 
-기존 모델·프로토콜 회귀를 유지하며 실제 Home Assistant fixture·loader·config entry·플랫폼·서비스 로딩을 검증합니다. 구현 구조·의존성·공통 CI·개발 문서·영문 기본/한글 README·동적 Usage·BLE 고유 문제 해결을 적용합니다. domain·unique ID·entry schema·통합 버전·기존 지원 하한은 보존합니다. 배포 tag·GitHub Release는 자동 생성하지 않습니다.
+이번 재검토는 중앙 README 관리 영역·HACS Default 배지/다운로드·My HACS 설치 링크, 공용 CI caller, 실제 HA 테스트 기반, imagespec DOC-08 문서 및 실행 예제 계약, 제품 분류 검토를 적용합니다. 기존 README 본문·제품 갤러리·예제와 기기 동작을 보존합니다. domain·unique ID·entry schema·통합 버전·지원 하한은 변경하지 않습니다. tag·Release는 생성하지 않습니다.
 
-역사적 최소 requirements는 Dependabot 및 자동 갱신에서 제외해 정확한 지원 조합을 보존합니다. current HA/플러그인 업데이트와 최소 환경 변경은 별도로 검토하며 상세 명령·판정은 체크리스트와 [개발 안내](docs/development.md)에 남깁니다.
+역사적 최소 requirements는 자동 갱신에서 제외합니다. current 환경 변경은 최소 지원 정책과 분리합니다. 새 검증 결과는 체크리스트의 2026-10-20 재검토 기록에 적으며 과거 PASS를 이번 변경의 증거로 재사용하지 않습니다.
+
+## HACS 기본 목록 근거
+
+2026-10-20 공식 [hacs/default integration 목록](https://github.com/hacs/default/blob/a75c02e2cb94db482c5aaddcc83d0dad00cc20a0/integration)에 `eigger/hass-marklife`가 존재함을 확인했습니다. 이에 따라 Custom/Analytics Usage에서 Default/HACS Downloads로 변경합니다. HACS 기본 목록 등재와 통합의 실제 설치 완료는 별개이며 설치 절의 My HACS 링크에서 사용자가 설치를 진행합니다.
 
 ## 검증 경계와 저장소 설정
 
-실제 Home Assistant core를 실행하고 Bluetooth 광고/GATT 등 외부 장치 경계(`PrinterTransport`)만 대체합니다. 프로토콜 파서, 래스터 변환, 흐름 제어, 클라이언트 상태 머신, 엔티티/서비스 핸들러는 실제 코드로 동작합니다.
+실제 HA fixture·loader·config entry·플랫폼·서비스를 실행합니다. Bluetooth 장치 통신만 mock하고 실제 프로토콜·렌더링·설정·생명주기 로직을 검증합니다. DOC-08은 실제 등록 action schema와 production 준비 함수를 거쳐 이미 설치된 imagespec의 public validate/render를 실행하며 프린터 명령은 보내지 않습니다.
 
-README의 P15 로컬 어댑터·ESPHome 프록시 확인은 기존 실물 확인 이력으로 보존합니다. 이번 작업은 새 실물 모델·프록시 보드·무선 성능·HA frontend UI 검증이 아닙니다. 공통 추천 기기·구매 링크는 중앙 Bluetooth 문서로 연결하고 모든 조합 검증을 주장하지 않습니다.
-
-원격 Issues와 Discussions는 모두 활성, LICENSE는 MIT이며 정식 release 0.2.3이 존재함을 확인했습니다. Default HACS 미등재 상태이므로 Custom 배지를 사용합니다. Usage는 원격 집계 사전 조회와 관계없이 추가합니다.
+이번 작업의 새 실물 프린터·ESPHome 보드·무선 성능·HA frontend 검증은 없습니다. 기존 P15 실물 확인 이력은 기존 범위로 보존합니다. Issues/Discussions 활성, 기본 브랜치 main, MIT 라이선스를 원격 메타데이터에서 확인했습니다.
 
 ## 예외
 
-| 규칙 ID | 이유 | 담당자 | 재검토 조건 |
-|---|---|---|---|
-| 없음 | 기록된 예외 없음 | - | - |
+없음. 미검증·실패는 예외나 PASS로 바꾸지 않고 체크리스트에 남깁니다.
 
-## 최종 채택 판정
+## 재검토 판정
 
-- 테스트 결과: Current 환경(Python 3.14.5, HA 2026.10.2, 플러그인 0.13.373) 및 최소 환경(Python 3.13.14, HA 2025.1.0, 플러그인 0.13.201)에서 각각 180 passed, 6 skipped 전원 통과.
-- Ruff 린트 및 포맷 통과 (`ruff check .`, `ruff format --check .`).
-- 문서 상호 링크 및 오프라인 배지 동기화 완료 (`sync_badges.py . --check`, `check_repository.py` 통과).
+로컬 구현·독립 검증 완료: current HA 2026.10.2 및 정확한 최소 HA 2025.9.0에서 각각 payload 2 passed, 회귀 186 passed / 6 skipped. 양 환경 imagespec 실제 1.1.0, pip check 및 정적 검사·Ruff·actionlint·로컬 Hassfest 통과. PR #14 구현 head `159f618`의 [Tests 6 jobs](https://github.com/eigger/hass-marklife/actions/runs/39426327885) 및 [Validate 3 jobs](https://github.com/eigger/hass-marklife/actions/runs/39426327855)가 모두 성공했습니다. 기록 변경 후 최종 head 검증·스쿼시 머지 및 main 상태는 [PR #14](https://github.com/eigger/hass-marklife/pull/14)와 중앙 현황표에서 확인합니다.
+
+제품 분류는 실제 감열 라벨 프린터 용도로 `computers_network.printers`를 선택했습니다. official taxonomy/Core `ec18d8b25d1ee39aa8b85a72a170e42bee33228c` 기준이며 categories_review와 일치합니다. 기존 published Hassfest의 categories 스키마 지원 지연 때문에 Validate의 `hassfest-core-ref`에 이 검토 SHA를 지정해 공식 Dockerfile/entrypoint/전체 validator를 사용합니다. 로컬 cached 이미지와 깨끗한 검토 source의 manifest validator·entrypoint hash 일치 및 실제 Hassfest Invalid integrations 0 확인. 공식 published 이미지가 지원하면 동일 tree를 기본 경로로 실제 재검증한 뒤 선택 입력을 제거합니다.

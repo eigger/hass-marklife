@@ -325,10 +325,10 @@ class MarklifeConfigFlow(ConfigFlow, domain=DOMAIN):
     @staticmethod
     @callback
     def async_get_options_flow(config_entry):
-        return OptionsFlowHandler()
+        return MarklifeOptionsFlow()
 
 
-class OptionsFlowHandler(OptionsFlowWithReload):
+class MarklifeOptionsFlow(OptionsFlowWithReload):
     """Handle option updates."""
 
     async def async_step_init(

@@ -1,0 +1,20 @@
+action: marklife.print
+target:
+  device_id: "{{ device_id('sensor.p15_0000_ddeeff_battery') }}"
+data:
+  preview: true
+  width: 384
+  height: 96
+  payload:
+    - type: text
+      value: Hello World!
+      font: ppb.ttf
+      x: 10
+      y: 10
+      size: 40
+    - type: qrcode
+      data: https://www.home-assistant.io
+      x: 270
+      y: 10
+      width: 80
+      height: 80
