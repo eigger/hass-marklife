@@ -2,6 +2,13 @@
 
 from __future__ import annotations
 
+# <!-- hass-standards:domain-fixtures:start -->
+# Use pytest_homeassistant_custom_component.common.MockConfigEntry for
+# mock_config_entry when the integration uses config entries.
+# Define mock_client only when an external communication client is present.
+# Mock external communication boundaries, never Home Assistant core modules.
+# Keep integration-specific fixtures below this managed block.
+# <!-- hass-standards:domain-fixtures:end -->
 from time import monotonic
 
 import pytest
@@ -148,7 +155,7 @@ async def advertisement(hass, enable_bluetooth):
 
 
 @pytest.fixture
-def entry(hass):
+def mock_config_entry(hass):
     config = MockConfigEntry(
         domain=DOMAIN,
         unique_id=ADDRESS,
@@ -157,6 +164,11 @@ def entry(hass):
     )
     config.add_to_hass(hass)
     return config
+
+
+@pytest.fixture
+def entry(mock_config_entry):
+    return mock_config_entry
 
 
 @pytest.fixture
@@ -182,3 +194,39 @@ def entity_id(hass):
         )
 
     return lookup
+
+
+@pytest.fixture
+async def payload_example_setup(loaded_entry, hass):
+    """Load the real entry and registered print action without printing."""
+    assert hass.services.has_service(DOMAIN, "print")
+
+
+@pytest.fixture
+def payload_example_adapter():
+    """Bind documented actions to the production render preparation path."""
+    from functools import partial
+
+    from homeassistant.core import ServiceCall
+
+    from custom_components.marklife.render import prepare_render, render_image
+
+    def adapter(hass, example_metadata, normalized_action, schema_data):
+        from hass_standards_payload import PreparedPayload
+
+        service = ServiceCall(hass, DOMAIN, "print", schema_data)
+        entry_id = next(iter(hass.data[DOMAIN]))
+        device = hass.data[DOMAIN][entry_id]["device"]
+        payload, context, options = prepare_render(
+            service, hass, device.ble_data.printhead_px
+        )
+        return PreparedPayload(
+            payload=payload,
+            context=context,
+            render_options=options,
+            prepare=partial(
+                render_image, entry_id, service, hass, device.ble_data.printhead_px
+            ),
+        )
+
+    return adapter

@@ -1,18 +1,20 @@
+<!-- hass-standards:header:start -->
 # hass-marklife
 
-<!-- hass-standards:badges:start -->
-[![HACS Custom](https://img.shields.io/badge/HACS-Custom-41BDF5?style=flat-square)](#installation)
-[![Release](https://img.shields.io/github/v/release/eigger/hass-marklife?style=flat-square)](https://github.com/eigger/hass-marklife/releases)
-[![Home Assistant minimum](https://img.shields.io/badge/HA-%E2%89%A5%202025.9.0-41BDF5?style=flat-square)](hacs.json)
-[![Tests](https://img.shields.io/github/actions/workflow/status/eigger/hass-marklife/tests.yml?branch=main&style=flat-square&label=Tests)](https://github.com/eigger/hass-marklife/actions/workflows/tests.yml)
-[![Validate](https://img.shields.io/github/actions/workflow/status/eigger/hass-marklife/validate.yml?branch=main&style=flat-square&label=Validate)](https://github.com/eigger/hass-marklife/actions/workflows/validate.yml)
-[![License](https://img.shields.io/github/license/eigger/hass-marklife?style=flat-square)](LICENSE)
-[![Analytics reporting installs](https://img.shields.io/badge/dynamic/json?style=flat-square&color=41BDF5&label=Usage&query=%24.marklife.total&url=https%3A%2F%2Fanalytics.home-assistant.io%2Fcustom_integrations.json)](https://analytics.home-assistant.io/)
-<!-- hass-standards:badges:end -->
+A HACS custom integration for Marklife Bluetooth thermal label printers (such as P15, P12, M60, P50, and compatible models) using Home Assistant's native Bluetooth stack and ESPHome Bluetooth proxies. Generates and prints declarative label layouts via [imagespec](https://github.com/eigger/imagespec).
 
 **English** | [한국어](README.ko.md)
 
-A HACS custom integration for Marklife Bluetooth thermal label printers (such as P15, P12, M60, P50, and compatible models) using Home Assistant's native Bluetooth stack and ESPHome Bluetooth proxies. Generates and prints declarative label layouts via [imagespec](https://github.com/eigger/imagespec).
+<!-- hass-standards:badges:start -->
+[![Release](https://img.shields.io/github/v/release/eigger/hass-marklife?style=flat)](https://github.com/eigger/hass-marklife/releases)
+[![HACS Default](https://img.shields.io/badge/HACS-Default-41BDF5?style=flat)](#installation)
+[![Home Assistant minimum](https://img.shields.io/badge/HA-%E2%89%A5%202025.9.0-41BDF5?style=flat)](hacs.json)
+[![Tests](https://img.shields.io/github/actions/workflow/status/eigger/hass-marklife/tests.yml?branch=main&style=flat&label=Tests)](https://github.com/eigger/hass-marklife/actions/workflows/tests.yml)
+[![Validate](https://img.shields.io/github/actions/workflow/status/eigger/hass-marklife/validate.yml?branch=main&style=flat&label=Validate)](https://github.com/eigger/hass-marklife/actions/workflows/validate.yml)
+[![License](https://img.shields.io/github/license/eigger/hass-marklife?style=flat)](LICENSE)
+[![HACS Downloads](https://img.shields.io/badge/dynamic/json?style=flat&color=41BDF5&label=HACS+Downloads&query=%24%5B%3F%28%40.full_name%3D%3D%22eigger%2Fhass-marklife%22%29%5D.downloads&url=https%3A%2F%2Fdata-v2.hacs.xyz%2Fintegration%2Fdata.json)](https://www.hacs.xyz/)
+<!-- hass-standards:badges:end -->
+<!-- hass-standards:header:end -->
 
 ## Gallery
 
@@ -30,16 +32,20 @@ A HACS custom integration for Marklife Bluetooth thermal label printers (such as
 ## Requirements
 
 - Home Assistant **2025.9.0** or newer.
-- A functional Bluetooth adapter or [ESPHome Bluetooth proxy](https://github.com/eigger/hass-repo-standards/blob/main/docs/bluetooth.md) with active connections enabled (`bluetooth_proxy: active: true`).
+- A functional Bluetooth adapter or [ESPHome Bluetooth proxy](https://github.com/eigger/blesession/blob/main/docs/bluetooth.md) with active connections enabled (`bluetooth_proxy: active: true`).
 - A supported Marklife BLE printer. Disconnect vendor mobile apps before printing.
 
 ## Installation
 
-1. Add `https://github.com/eigger/hass-marklife` to **HACS → Integrations → Custom repositories** (category *Integration*), or copy `custom_components/marklife/` into your Home Assistant `custom_components/` directory.
+<!-- hass-standards:installation:start -->
+[![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=eigger&repository=hass-marklife)
+<!-- hass-standards:installation:end -->
+
+1. Search for **Marklife** in **HACS → Integrations** and download it, or copy `custom_components/marklife/` into your Home Assistant `custom_components/` directory.
 2. Restart Home Assistant.
 3. Open **Settings → Devices & services** and confirm the automatically discovered printer, or choose **Add integration → Marklife** (falls through to a manual address/model selection step if not automatically detected).
 
-Refer to the [Bluetooth proxy guide](https://github.com/eigger/hass-repo-standards/blob/main/docs/bluetooth.md) for ESPHome setup recommendations (e.g. XIAO W5500 V1.2 or M5Stack AtomS3U).
+Refer to the [Bluetooth proxy guide](https://github.com/eigger/blesession/blob/main/docs/bluetooth.md) for ESPHome setup recommendations (e.g. XIAO W5500 V1.2 or M5Stack AtomS3U).
 
 ## Quick Start
 
@@ -75,18 +81,29 @@ data:
 
 ## Documentation
 
+- [Payload guide](docs/payload.md) — Complete action examples, output settings, and renderer limitations.
+
 - [User Guide](docs/user-guide.md) — Comprehensive model table, advanced options, entities, orientation guidelines, and `imagespec` examples.
 - [Troubleshooting](docs/troubleshooting.md) — Credit starvation tuning, packet sizes, connection issues, and debug log reporting.
 - [Development](docs/development.md) — Repository architecture, real Home Assistant test suite, and standards adoption.
-- [Bluetooth Proxy Setup](https://github.com/eigger/hass-repo-standards/blob/main/docs/bluetooth.md) — General hardware and ESPHome proxy configuration guide.
+- [Bluetooth Proxy Setup](https://github.com/eigger/blesession/blob/main/docs/bluetooth.md) — General hardware and ESPHome proxy configuration guide.
 
+<!-- hass-standards:support:start -->
 ## Support
 
-- Report bugs or request model support via [GitHub Issues](https://github.com/eigger/hass-marklife/issues).
-- General questions and template sharing in [GitHub Discussions](https://github.com/eigger/hass-marklife/discussions).
+- [Issues](https://github.com/eigger/hass-marklife/issues): Report bugs or request features.
+- [Discussions](https://github.com/eigger/hass-marklife/discussions): Ask questions and share your experience.
+<!-- hass-standards:support:end -->
 
+<!-- hass-standards:related-projects:start -->
+<!-- hass-standards:related-projects:end -->
+
+<!-- hass-standards:license:start -->
 ## License
 
-- Licensed under [MIT](LICENSE).
+Released under the [MIT License](LICENSE).
+
 - Protocol core ported from [tomLadder/thermoprint](https://github.com/tomLadder/thermoprint) (MIT).
+
 - Built-in font `ppb.ttf` included for label rendering.
+<!-- hass-standards:license:end -->

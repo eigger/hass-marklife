@@ -56,17 +56,23 @@ def render_image(entity_id, service, hass, default_width: int = 384):
     defaulting to an arbitrary canvas.
     """
     try:
-        return render(
-            payload=service.data.get("payload", ""),
-            width=service.data.get("width", default_width),
-            height=service.data.get("height", 240),
-            rotate=service.data.get("rotate", 0),
-            rotate_mode="image",  # label printer: variable size, drawing rotates
-            background=service.data.get("background", "white"),
-            dither=False,
-            context=_make_context(
-                hass, default_font="ppb.ttf", palette=["black", "white"]
-            ),
-        )
+        payload, context, options = prepare_render(service, hass, default_width)
+        return render(payload=payload, context=context, **options)
     except RenderError as err:
         raise HomeAssistantError(str(err)) from err
+
+
+def prepare_render(service, hass, default_width: int = 384):
+    """Share the actual payload, context and device canvas policy with callers."""
+    return (
+        service.data.get("payload", ""),
+        _make_context(hass, default_font="ppb.ttf", palette=["black", "white"]),
+        {
+            "width": service.data.get("width", default_width),
+            "height": service.data.get("height", 240),
+            "rotate": service.data.get("rotate", 0),
+            "rotate_mode": "image",  # variable label size; rotate the drawing
+            "background": service.data.get("background", "white"),
+            "dither": False,
+        },
+    )

@@ -125,3 +125,55 @@ async def test_unload_removes_service_when_last_entry(hass, loaded_entry):
 
     assert not hass.services.has_service(DOMAIN, "print")
     assert PRINT_LOCK not in hass.data
+
+
+async def test_print_schema_preserves_supported_payload(hass, loaded_entry):
+    response = await hass.services.async_call(
+        DOMAIN,
+        "print",
+        {
+            "payload": [{"type": "text", "value": "Schema", "x": 0, "y": 0}],
+            "preview": True,
+        },
+        blocking=True,
+        return_response=True,
+    )
+    assert response["image"].startswith("data:image/png;base64,")
+
+
+def test_print_schema_preserves_legacy_string_and_extra_fields():
+    """Do not change renderer error handling or remove existing caller data."""
+    from custom_components.marklife import PRINT_SCHEMA
+
+    data = {"payload": "legacy string", "device_id": ["device"], "background": "white"}
+    assert PRINT_SCHEMA(data) == data
+
+
+@pytest.mark.parametrize(
+    "data",
+    [
+        {"payload": 42},
+        {"payload": [], "width": 0},
+        {"payload": [], "height": "invalid"},
+    ],
+)
+async def test_print_schema_rejects_invalid_data(hass, loaded_entry, transport, data):
+    import voluptuous as vol
+
+    before = len(transport.writes)
+    with pytest.raises(vol.Invalid):
+        await hass.services.async_call(DOMAIN, "print", data, blocking=True)
+    assert len(transport.writes) == before
+
+
+async def test_print_legacy_string_keeps_renderer_error(hass, loaded_entry):
+    """String payloads keep their existing render failure rather than new parsing."""
+    with pytest.raises(
+        ServiceValidationError, match="each payload element must be a dict"
+    ):
+        await hass.services.async_call(
+            DOMAIN,
+            "print",
+            {"payload": "- type: text\n  value: Example", "preview": True},
+            blocking=True,
+        )

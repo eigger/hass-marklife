@@ -34,6 +34,9 @@
     { "local_name": "T3_*" },
     { "local_name": "ewtto ET-*" }
   ],
+  "categories": [
+    "computers_network.printers"
+  ],
   "codeowners": [
     "@eigger"
   ],
