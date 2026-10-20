@@ -38,6 +38,6 @@
 
 ## 재검토 판정
 
-로컬 구현·독립 검증 완료: current HA 2026.10.2 및 정확한 최소 HA 2025.9.0에서 각각 payload 2 passed, 회귀 186 passed / 6 skipped. 양 환경 imagespec 실제 1.1.0, pip check 및 정적 검사·Ruff·actionlint·로컬 Hassfest 통과. 원격 HACS/Tests/Validate CI 및 main 반영은 미실행이므로 전체 채택 판정은 진행 중입니다.
+로컬 구현·독립 검증 완료: current HA 2026.10.2 및 정확한 최소 HA 2025.9.0에서 각각 payload 2 passed, 회귀 186 passed / 6 skipped. 양 환경 imagespec 실제 1.1.0, pip check 및 정적 검사·Ruff·actionlint·로컬 Hassfest 통과. PR #14 구현 head `159f618`의 [Tests 6 jobs](https://github.com/eigger/hass-marklife/actions/runs/39426327885) 및 [Validate 3 jobs](https://github.com/eigger/hass-marklife/actions/runs/39426327855)가 모두 성공했습니다. 기록 변경 후 최종 head 검증·스쿼시 머지 및 main 상태는 [PR #14](https://github.com/eigger/hass-marklife/pull/14)와 중앙 현황표에서 확인합니다.
 
 제품 분류는 실제 감열 라벨 프린터 용도로 `computers_network.printers`를 선택했습니다. official taxonomy/Core `ec18d8b25d1ee39aa8b85a72a170e42bee33228c` 기준이며 categories_review와 일치합니다. 기존 published Hassfest의 categories 스키마 지원 지연 때문에 Validate의 `hassfest-core-ref`에 이 검토 SHA를 지정해 공식 Dockerfile/entrypoint/전체 validator를 사용합니다. 로컬 cached 이미지와 깨끗한 검토 source의 manifest validator·entrypoint hash 일치 및 실제 Hassfest Invalid integrations 0 확인. 공식 published 이미지가 지원하면 동일 tree를 기본 경로로 실제 재검증한 뒤 선택 입력을 제거합니다.

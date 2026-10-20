@@ -13,7 +13,7 @@
 | current 목표 | Python 3.14 / HA 2026.10.2 / pytest-homeassistant-custom-component 0.13.373 |
 | minimum 목표 | Python 3.13 / HA 2025.9.0 / 플러그인 0.13.277 |
 | 라이브러리 | imagespec[datamatrix]>=1.1.0; current 및 정확한 하한 별도 확인 |
-| 판정 | 로컬 구현·독립 검증 완료. 원격 HACS/CI·기본 브랜치 반영 전이므로 전체 채택 판정은 진행 중 |
+| 판정 | 로컬·독립 검증 및 PR 구현 커밋의 원격 9 checks PASS. 기록 변경 후 최종 head CI와 main 반영은 PR에서 확인 |
 
 이번 표의 PASS는 2026-10-20 작업 tree에 대한 해당 검사만 의미합니다. 과거 PR #11의 성공을 새 변경의 증거로 사용하지 않습니다. TODO는 미완료/미검증이며 N/A·예외로 대체하지 않습니다.
 
@@ -30,13 +30,14 @@
 | TEST-04/05, DEP-01/02/05/06/07/08 | PASS | 최소 HA/최소 라이브러리 및 current 실제 환경 결과는 아래 표. imagespec 두 해결값 모두 1.1.0이므로 같은 설치값 결과 재사용. 지원 최소·런타임 의존성 하한 유지 |
 | HACS-01/02/03/06 | PASS | hacs.json 최소 HA2025.9.0 및 배포 구조 유지. [HACS default 목록](https://github.com/hacs/default/blob/a75c02e2cb94db482c5aaddcc83d0dad00cc20a0/integration)의 eigger/hass-marklife 등재 확인(2026-10-20), Default/Downloads 배지 및 양언어 My HACS 링크 반영 |
 | HACS-05 Hassfest | PASS | local Docker d6f981f031454c43bdd833c5c7a795a9392f69a82818f93379e88a655d358c5f (minibig-hassfest:ec18d8), `docker run --rm --volume /Volumes/HDD/GitHub/hass-marklife:/github/workspace minibig-hassfest:ec18d8`: Integrations 1 / Invalid integrations 0. 검토 Core ec18d8b25d1ee39aa8b85a72a170e42bee33228c의 깨끗한 source와 image 내 manifest validator/entrypoint SHA256 일치 확인. 최종 production 변경 후 같은 명령 재실행 통과 |
-| HACS-05 HACS action | TODO | 로컬 brand PNG 유지. 이번 tree의 공식 HACS action 원격 실행 전. 과거 PR #11 성공은 이번 결과 아님 |
+| HACS-05 HACS action | PASS | 로컬 brand PNG 유지. PR #14 head 159f618의 공식 HACS action 성공: [Validate](https://github.com/eigger/hass-marklife/actions/runs/39426327855) |
 | CI-01/02/03/04/05/06/07/08/12 로컬 형식·구성 | PASS | 중앙 템플릿 caller/standards-ref, 실행 조건, 독립 최소 HA/current 및 imagespec modes 유지. actionlint 1.7.12·중앙 정적 검사 통과. Dependabot action 갱신 및 current HA/plugin group 추가, 최소 requirements 제외. 원격 필수 체크는 아래 TODO |
 | CI-09/10, DEP-03/04 로컬 구성 | PASS | 단일 bot PR updater·실제 변경 tree 검증·standards-ref 반영. 중앙 updater가 필수 payload 계약 후 정확한 scaffold만 PYTEST_ADDOPTS로 제외함을 확인. 원격 bot PR 생성/dispatch는 미실행 |
 | DOC-01/02/03/04/05/06 | PASS | 중앙 관리 영역·flat 배지·다운로드·설치 링크 적용. 독립 리뷰에서 기존 본문/갤러리/예제/출처·폰트 고지 보존 및 양언어 의미 일치 확인 |
 | DOC-07 | PASS | blesession 미사용이므로 고정 blesession 템플릿 자동 검사 대상 아님. proxy 안내와 기기별 준비/문제 해결 유지, README 및 사용자 문서의 언어별 blesession 원본 링크 확인 |
 | DOC-08 | PASS | docs/payload.md 및 payload.ko.md, 실제 marklife.print YAML 2개, 중앙 scaffold 및 production 준비 함수 adapter. 실제 HA schema 및 설치된 imagespec validate/render 두 환경 2 passed. 템플릿 state·내장 폰트·384×96/흑백 출력 및 실제 prepare 경로 독립 검토 |
-| HACS-05/CI-04 원격 실행·GOV-04 기본 브랜치 반영 | TODO | 이번 PR tree의 공식 HACS/Tests/Validate CI 및 main 반영 전. 과거 CI 결과로 대체하지 않음 |
+| HACS-05/CI-04 원격 실행 | PASS | PR #14 head 159f618: Tests 6 jobs, Validate 3 jobs 모두 성공. 아래 실행 근거 참조 |
+| GOV-04 기본 브랜치 반영 | TODO | 사용자 요청에 따라 최종 head CI 후 스쿼시 머지 진행. 최종 merge commit 및 main CI는 PR #14와 중앙 현황표에서 확인 |
 | HACS-04, REL-01/02/03, CI-11 | N/A | 이번 작업에서 버전·tag·Release 생성 없음. 기존 0.2.3 유지 |
 | REL-04 | N/A | 이전·중단 없음 |
 | REL-05 | PASS | 표준 재검토와 기존 최소 지원 정책 분리, 통합 버전·런타임 의존성 하한 유지 |
@@ -61,7 +62,8 @@
 
 ## 검증 한계와 남은 작업
 
-- 원격 HACS/Validate/Tests CI는 이번 PR tree에서 실행되지 않았습니다. 기본 브랜치·required checks 설정을 변경하지 않았습니다.
+- PR #14 head `159f6185e5b99a1661d136ddedaa1bb335e4802b`의 [Tests CI](https://github.com/eigger/hass-marklife/actions/runs/39426327885) 6 jobs 및 [Validate CI](https://github.com/eigger/hass-marklife/actions/runs/39426327855) 3 jobs 성공. 4 HA/library matrix 각각 payload 2 passed 및 회귀 186 passed, 6 skipped; 실제 imagespec 1.1.0. Ubuntu Python 3.14.8/3.13.16. 기본 브랜치 required checks 설정은 변경하지 않았습니다.
+- 이 기록 변경의 최종 head CI 및 merge/main 상태는 [PR #14](https://github.com/eigger/hass-marklife/pull/14)에서 확인합니다. 위 PASS 증거는 명시한 159f618에 대한 결과입니다.
 - 실물 BLE 인쇄, 실제 프록시·기기 조합, HA frontend는 새로 검증하지 않았습니다. 기존 실물 이력은 기존 범위의 증거입니다.
 - 중앙 현황은 로컬만 수정했습니다. 사용자 머지 요청으로 PR #14를 생성했으며 tag/Release는 생성하지 않습니다.
 
