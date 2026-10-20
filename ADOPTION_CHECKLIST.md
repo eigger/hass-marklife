@@ -5,7 +5,7 @@
 | 항목 | 값 |
 |---|---|
 | 저장소 / 기본 브랜치 / domain | eigger/hass-marklife / main / marklife |
-| 대상 | main `9bd640b`에서 시작한 이번 작업 tree (미커밋) |
+| 대상 | main `9bd640b`에서 시작한 [PR #14](https://github.com/eigger/hass-marklife/pull/14), 구현 `d344942` |
 | 표준 full SHA | `648dad941a118c80325f44c7a13cb5b5b9c1c788`; 원격 main 조회 일치 |
 | 이전 채택 | 기준 `8cd5588bf7f010fcce5fb03bd521aaaa36cb0518`, [PR #11](https://github.com/eigger/hass-marklife/pull/11), main `7149585` |
 | 조율 / 구현 / 독립 리뷰 | `/root` / `/root/implementation` / `/root/review` |
@@ -36,7 +36,7 @@
 | DOC-01/02/03/04/05/06 | PASS | 중앙 관리 영역·flat 배지·다운로드·설치 링크 적용. 독립 리뷰에서 기존 본문/갤러리/예제/출처·폰트 고지 보존 및 양언어 의미 일치 확인 |
 | DOC-07 | PASS | blesession 미사용이므로 고정 blesession 템플릿 자동 검사 대상 아님. proxy 안내와 기기별 준비/문제 해결 유지, README 및 사용자 문서의 언어별 blesession 원본 링크 확인 |
 | DOC-08 | PASS | docs/payload.md 및 payload.ko.md, 실제 marklife.print YAML 2개, 중앙 scaffold 및 production 준비 함수 adapter. 실제 HA schema 및 설치된 imagespec validate/render 두 환경 2 passed. 템플릿 state·내장 폰트·384×96/흑백 출력 및 실제 prepare 경로 독립 검토 |
-| HACS-05/CI-04 원격 실행·GOV-04 기본 브랜치 반영 | TODO | 이번 미커밋 tree의 공식 HACS/Tests/Validate CI 및 main 반영 전. 과거 CI 결과로 대체하지 않음 |
+| HACS-05/CI-04 원격 실행·GOV-04 기본 브랜치 반영 | TODO | 이번 PR tree의 공식 HACS/Tests/Validate CI 및 main 반영 전. 과거 CI 결과로 대체하지 않음 |
 | HACS-04, REL-01/02/03, CI-11 | N/A | 이번 작업에서 버전·tag·Release 생성 없음. 기존 0.2.3 유지 |
 | REL-04 | N/A | 이전·중단 없음 |
 | REL-05 | PASS | 표준 재검토와 기존 최소 지원 정책 분리, 통합 버전·런타임 의존성 하한 유지 |
@@ -61,9 +61,9 @@
 
 ## 검증 한계와 남은 작업
 
-- 원격 HACS/Validate/Tests CI는 이번 미커밋 tree에서 실행되지 않았습니다. 기본 브랜치·required checks 설정을 변경하지 않았습니다.
+- 원격 HACS/Validate/Tests CI는 이번 PR tree에서 실행되지 않았습니다. 기본 브랜치·required checks 설정을 변경하지 않았습니다.
 - 실물 BLE 인쇄, 실제 프록시·기기 조합, HA frontend는 새로 검증하지 않았습니다. 기존 실물 이력은 기존 범위의 증거입니다.
-- 중앙 현황은 로컬만 수정했으며 commit/push/PR/tag/Release는 생성하지 않았습니다.
+- 중앙 현황은 로컬만 수정했습니다. 사용자 머지 요청으로 PR #14를 생성했으며 tag/Release는 생성하지 않습니다.
 
 ## 예외
 

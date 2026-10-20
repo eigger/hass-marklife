@@ -5,7 +5,7 @@
 - 이전 기준: `8cd5588bf7f010fcce5fb03bd521aaaa36cb0518`, 최초 채택 PR [#11](https://github.com/eigger/hass-marklife/pull/11), main `7149585`
 - 재검토일: 2026-10-20
 - profile: integration / ha; domain `marklife`, 실제 기본 브랜치 `main`
-- 검토 대상: main `9bd640b`에서 시작한 작업 tree
+- 검토 대상: main `9bd640b`에서 시작한 [PR #14](https://github.com/eigger/hass-marklife/pull/14) (구현 `d344942`)
 - 적용 점검표: [ADOPTION_CHECKLIST.md](ADOPTION_CHECKLIST.md)
 - 중앙 현황: https://github.com/eigger/hass-repo-standards/blob/main/docs/adoption-status.md
 - 담당: 조율 `/root`, 구현 `/root/implementation`, 독립 리뷰·검증 `/root/review`
