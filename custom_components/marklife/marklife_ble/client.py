@@ -8,11 +8,21 @@ Port of thermoprint ``printer.ts``, adapted to bleak. Owns one connected
 from __future__ import annotations
 
 import asyncio
+import contextlib
 import logging
 from collections.abc import Callable
 from time import monotonic
 
 from bleak import BleakClient
+from blesession import (
+    BleSessionError,
+    SessionDropped,
+    SessionTrace,
+    dropped_event,
+    guarded_write,
+    start_notify_with_recovery,
+    stop_notify_best_effort,
+)
 
 from .errors import ErrorCode, MarklifeError, PrinterError
 from .flow import CreditFlowController
@@ -53,6 +63,7 @@ class MarklifeClient:
         packet_size_cap: int = 180,
     ) -> None:
         self._client = client
+        self.trace: SessionTrace | None = None
         self._profile = profile
         self._protocol = get_protocol(profile.protocol_id)
         self._packet_size_cap = packet_size_cap
@@ -89,10 +100,14 @@ class MarklifeClient:
         # subscribed, stop() still has to unsubscribe RX -- otherwise a kept-open
         # connection carries a live handler bound to a dead client into the next
         # poll, and re-subscribing the same characteristic then fails.
-        await self._client.start_notify(self._profile.rx_uuid, self._on_rx)
+        await start_notify_with_recovery(
+            self._client, self._profile.rx_uuid, self._on_rx
+        )
         self._subscribed.append(self._profile.rx_uuid)
         if self._profile.cx_uuid:
-            await self._client.start_notify(self._profile.cx_uuid, self._on_cx)
+            await start_notify_with_recovery(
+                self._client, self._profile.cx_uuid, self._on_cx
+            )
             self._subscribed.append(self._profile.cx_uuid)
 
         if self._profile.uses_credits:
@@ -107,7 +122,7 @@ class MarklifeClient:
         while self._subscribed:
             uuid = self._subscribed.pop()
             try:
-                await self._client.stop_notify(uuid)
+                await stop_notify_best_effort(self._client, uuid)
             except Exception:  # noqa: BLE001 - teardown must not mask the real error
                 _LOGGER.debug("stop_notify(%s) failed", uuid, exc_info=True)
 
@@ -162,15 +177,24 @@ class MarklifeClient:
                 # 30 s timeout.
                 waiter = self._add_waiter("success")
                 try:
-                    if preamble:
-                        await self._flow.send(preamble)
-                        # Let the printer chew through the setup commands and
-                        # hand credits back, so the raster starts with a full
-                        # window and streams without a stall mid-label.
-                        await self._flow.wait_for_credits(3, 1.0)
-
-                    await self._flow.send(bulk, report)
-                    await self._wait_for_print_result(waiter)
+                    with (
+                        self.trace.timed("transfer")
+                        if self.trace
+                        else contextlib.nullcontext()
+                    ):
+                        if preamble:
+                            await self._flow.send(preamble)
+                            # Let the printer chew through the setup commands and
+                            # hand credits back, so the raster starts with a full
+                            # window and streams without a stall mid-label.
+                            await self._flow.wait_for_credits(3, 1.0)
+                        await self._flow.send(bulk, report)
+                    with (
+                        self.trace.timed("finish")
+                        if self.trace
+                        else contextlib.nullcontext()
+                    ):
+                        await self._wait_for_print_result(waiter)
                 finally:
                     self._drop_waiter("success", waiter)
         finally:
@@ -221,7 +245,26 @@ class MarklifeClient:
         waiter = self._add_waiter(kind)
         try:
             await self._flow.send(command.data)
-            return await asyncio.wait_for(waiter, QUERY_TIMEOUT)
+            dropped = dropped_event(self._client)
+            if dropped is None:
+                return await asyncio.wait_for(waiter, QUERY_TIMEOUT)
+            drop_waiter = asyncio.create_task(dropped.wait())
+            try:
+                done, _ = await asyncio.wait(
+                    {waiter, drop_waiter},
+                    timeout=QUERY_TIMEOUT,
+                    return_when=asyncio.FIRST_COMPLETED,
+                )
+                if waiter in done:
+                    return waiter.result()
+                if drop_waiter in done:
+                    raise SessionDropped(kind)
+                raise TimeoutError
+            finally:
+                drop_waiter.cancel()
+                await asyncio.gather(drop_waiter, return_exceptions=True)
+        except BleSessionError:
+            raise
         except TimeoutError:
             _LOGGER.debug("No %s response within %.0fs", kind, QUERY_TIMEOUT)
             return None
@@ -291,7 +334,9 @@ class MarklifeClient:
         self._flow.set_packet_size(size)
 
     async def _write_tx(self, chunk: bytes) -> None:
-        await self._client.write_gatt_char(self._profile.tx_uuid, chunk, response=False)
+        await guarded_write(
+            self._client, self._profile.tx_uuid, chunk, step="transfer", response=False
+        )
 
     # ------------------------------------------------------------------
     # waiters

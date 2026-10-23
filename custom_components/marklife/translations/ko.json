@@ -113,5 +113,15 @@
         }
       }
     }
+  },
+  "entity": {
+    "sensor": {
+      "last_error": {
+        "name": "최근 오류"
+      },
+      "error_count": {
+        "name": "오류 횟수"
+      }
+    }
   }
 }

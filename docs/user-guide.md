@@ -70,6 +70,8 @@ Most settings have sensible defaults based on your printer model. To adjust them
 |---|---|
 | `sensor.<device>_battery` | Battery level percentage |
 | `sensor.<device>_status` | Current condition: `out_of_paper`, `cover_open`, `overheating`, `low_battery`, `cover_closed` |
+| `sensor.<device>_last_error` | Last actionable error; attributes retain the failed session, stage, radio, timings and likely cause |
+| `sensor.<device>_error_count` | Actionable failures since integration setup (resets on reload/restart) |
 | `sensor.<device>_print_duration` | Print duration in seconds (live during a job, total after completion) |
 | `binary_sensor.<device>_out_of_paper` | True if paper is out |
 | `binary_sensor.<device>_cover_open` | True if the cover is open |

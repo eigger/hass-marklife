@@ -15,7 +15,7 @@ jobs:
     with:
       standards-ref: 0c1592977591ecba077a4666d699840062711201
       domain: marklife
-      packages: '["imagespec"]'
+      packages: '["imagespec", "blesession"]'
       python-version: '3.14'
       ha-components: bluetooth recorder image sensor binary_sensor
       test-profile: ha

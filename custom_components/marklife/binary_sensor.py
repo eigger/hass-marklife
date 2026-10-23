@@ -17,6 +17,7 @@ from homeassistant.components.binary_sensor import (
     BinarySensorEntity,
     BinarySensorEntityDescription,
 )
+from homeassistant.const import EntityCategory
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.update_coordinator import (
@@ -162,6 +163,7 @@ class MarklifeConnectionBinarySensor(_DeviceStateBinarySensor):
     _attr_device_class = BinarySensorDeviceClass.CONNECTIVITY
     _attr_icon = "mdi:bluetooth-connect"
     _attr_name = "Connection"
+    _attr_entity_category = EntityCategory.DIAGNOSTIC
     _key = "connection"
 
     def _subscribe(self) -> None:
@@ -170,6 +172,11 @@ class MarklifeConnectionBinarySensor(_DeviceStateBinarySensor):
     @property
     def is_on(self) -> bool:
         return self._device.is_connected
+
+    @property
+    def extra_state_attributes(self) -> dict | None:
+        """The latest session, including radio and stage timings."""
+        return self._device.reports.last
 
 
 class MarklifePrintingBinarySensor(_DeviceStateBinarySensor):
