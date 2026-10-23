@@ -108,3 +108,11 @@
 
 - GATT의 BleakError가 인쇄 서비스 경계에서 HomeAssistantError로 변환되지 않는 기존 누락을 보완. 서비스 메시지 주소 마스킹, 진단 기록 및 연결 정리를 함께 검증하는 회귀 테스트 추가.
 - 변경 후 관련 세션·서비스 회귀는 current/minimum HA 각각 22 passed. Ruff 및 git diff --check PASS. 앞선 전체 197 passed는 이 추가 수정 전 결과이며, 추가 수정 후에는 관련 회귀를 실행함. 독립 리뷰는 수행하지 않음.
+
+
+### 독립 리뷰 및 PR 검증 (2026-10-23)
+
+- 사용자 승인에 따라 `/root/independent_review` 서브 에이전트가 전체 변경 및 신규 파일을 독립 리뷰. blesession 0.9.0 구현과 연결 수명·중단 처리·오류 보고를 대조한 결과 지적사항 없음. HA 2026.10.2에서 신규 세션 테스트 10 passed를 독립 실행.
+- 최종 코드의 전체 회귀는 current HA 2026.10.2 / minimum HA 2025.9.0 각각 중앙 payload contract 포함 198 passed, 6 skipped. 두 환경 blesession 0.9.0 및 imagespec 1.1.0, 의존성 검사 PASS. Ruff check / format check 및 git diff --check PASS.
+- 검토·병합 대상은 [PR #17](https://github.com/eigger/hass-marklife/pull/17). 병합 전 최종 head의 원격 Tests와 Validate 결과를 확인하며, 실제 결과는 PR에 연결된 check 기록을 근거로 함.
+- 실물 프린터 및 ESPHome proxy 검증은 미진행. 최신 중앙 전체 검사에 있는 기존 README 헤더 DOC-01 경고 2건은 별도이며, 채택된 중앙 ref의 원격 compliance 결과와 혼동하지 않음.
