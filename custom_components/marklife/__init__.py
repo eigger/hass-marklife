@@ -9,8 +9,9 @@ import logging
 from datetime import timedelta
 
 import voluptuous as vol
+from bleak.exc import BleakError
 from bleak_retry_connector import close_stale_connections_by_address
-from homeassistant.components import bluetooth
+from blesession.hass import ble_device_or_raise, radio_facts
 from homeassistant.components.image import Image
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import (
@@ -108,18 +109,14 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         tick_ms=tick_ms or None,
         starvation_ms=starvation_ms,
         packet_size_cap=packet_size_cap,
+        radio_facts=lambda trace: radio_facts(hass, address, trace.link),
     )
 
     async def _async_update_method() -> BLEData:
-        ble_device = bluetooth.async_ble_device_from_address(hass, address)
-        if ble_device is None:
-            _LOGGER.debug(
-                "Marklife printer is not currently visible; keeping last known data"
-            )
-            return device.ble_data
-
         try:
-            return await device.update_device(ble_device)
+            return await device.update_device(
+                lambda: ble_device_or_raise(hass, address)
+            )
         except Exception as err:  # noqa: BLE001 - never let polling kill the entry
             _LOGGER.debug(
                 "Unable to poll %s: %s; keeping last known data",
@@ -251,12 +248,6 @@ async def _print_on_entry(
     if service.data.get("preview"):
         return {"image": image_data}
 
-    ble_device = bluetooth.async_ble_device_from_address(hass, device.address)
-    if ble_device is None:
-        raise HomeAssistantError(
-            f"Could not find printer {redact_addresses(device.address)} on your Bluetooth network"
-        )
-
     # Serialise the BLE half domain-wide, not just per printer. Two printers
     # printing at once contend for the same adapter, and an ESP32 proxy only has
     # three connection slots -- overlapping jobs are how credit starvation and
@@ -265,7 +256,7 @@ async def _print_on_entry(
     async with lock:
         try:
             result = await device.print_image(
-                ble_device,
+                lambda: ble_device_or_raise(hass, device.address),
                 image,
                 density=int(service.data["density"])
                 if "density" in service.data
@@ -273,8 +264,16 @@ async def _print_on_entry(
                 paper_type=service.data.get("paper_type", "gap"),
                 copies=int(service.data.get("copies", 1)),
             )
-        except (MarklifeError, RuntimeError) as err:
-            raise HomeAssistantError(f"Failed to print: {err}") from err
+        except (
+            MarklifeError,
+            BleakError,
+            RuntimeError,
+            ConnectionError,
+            TimeoutError,
+        ) as err:
+            raise HomeAssistantError(
+                f"Failed to print: {redact_addresses(str(err))}"
+            ) from err
 
     result["image"] = image_data
     return result

@@ -22,7 +22,7 @@ jobs:
       test-profile: ha
       ha-components: 'bluetooth recorder image sensor binary_sensor'
       dependency-modes: '["current", "minimum"]'
-      minimum-packages: '["imagespec"]'
+      minimum-packages: '["imagespec", "blesession"]'
   minimum-ha:
     uses: eigger/hass-repo-standards/.github/workflows/python-tests.yml@0c1592977591ecba077a4666d699840062711201 # reviewed standards commit
     with:
@@ -35,4 +35,4 @@ jobs:
       test-profile: ha
       ha-components: 'bluetooth recorder image sensor binary_sensor'
       dependency-modes: '["current", "minimum"]'
-      minimum-packages: '["imagespec"]'
+      minimum-packages: '["imagespec", "blesession"]'

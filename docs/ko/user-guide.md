@@ -70,6 +70,8 @@ Home Assistant가 연결 가능한 모든 Marklife 프린터는 두 가지 BLE �
 |---|---|
 | `sensor.<device>_battery` | 배터리 잔량 (%) |
 | `sensor.<device>_status` | 현재 상태: `out_of_paper`, `cover_open`, `overheating`, `low_battery`, `cover_closed` |
+| `sensor.<device>_last_error` | 최근 오류. 실패 세션의 단계, 연결 경로, 소요 시간, 추정 원인을 속성으로 보존 |
+| `sensor.<device>_error_count` | 통합 설정 이후 오류 횟수 (다시 로드하거나 재시작하면 초기화) |
 | `sensor.<device>_print_duration` | 인쇄 소요 시간 (초, 인쇄 중 실시간 / 완료 후 최종 시간) |
 | `binary_sensor.<device>_out_of_paper` | 용지 부족 시 켜짐 |
 | `binary_sensor.<device>_cover_open` | 덮개 열림 시 켜짐 |

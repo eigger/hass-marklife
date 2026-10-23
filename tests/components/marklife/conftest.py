@@ -54,6 +54,7 @@ class PrinterTransport:
         self.services = FakeServices(service_uuid)
         self._handlers: dict[str, object] = {}
         self.on_write = None
+        self.disconnected_callback = None
 
     async def connect(self, *_args, **_kwargs):
         if self.fail_connect:
@@ -65,6 +66,8 @@ class PrinterTransport:
     async def disconnect(self):
         self.disconnects += 1
         self.is_connected = False
+        if self.disconnected_callback:
+            self.disconnected_callback(self)
 
     async def start_notify(self, uuid: str, handler) -> None:
         self._handlers[uuid] = handler
@@ -119,10 +122,11 @@ def transport(monkeypatch):
 
     async def fake_establish(*_args, **_kwargs):
         await device.connect()
+        device.disconnected_callback = _kwargs.get("disconnected_callback")
         return device
 
     monkeypatch.setattr(
-        "custom_components.marklife.marklife_ble.parser.establish_connection",
+        "blesession.session.establish_connection",
         fake_establish,
     )
     monkeypatch.setattr(client_module, "QUERY_TIMEOUT", 0.05)

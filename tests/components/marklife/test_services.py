@@ -99,7 +99,9 @@ async def test_print_service_device_not_found_on_bluetooth(
 ):
     from homeassistant.components import bluetooth
 
-    monkeypatch.setattr(bluetooth, "async_ble_device_from_address", lambda *_args: None)
+    monkeypatch.setattr(
+        bluetooth, "async_ble_device_from_address", lambda *_args, **_kwargs: None
+    )
 
     with pytest.raises(HomeAssistantError) as excinfo:
         await hass.services.async_call(

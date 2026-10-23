@@ -85,3 +85,26 @@
 - 계획: hacs.json에 zip_release:true, filename:marklife.zip을 추가하고 중앙 release.yml을 같은 SHA로 생성합니다. 기존 caller는 중앙 pin/standards-ref만 변경합니다. 지원 최소·통합 버전·의존성·구현·README 본문을 보존합니다.
 - 검증: 중앙 생성기/정적 검사·actionlint·실제 packager로 추적된 통합 파일의 ZIP 루트·manifest/번역/brand 등 런타임 자료 포함과 저장소 메타데이터 제외를 확인합니다. CLI 검증 명령·실제 버전·최종 head SHA·ZIP 결과·독립 리뷰·원격 CI 링크는 이 PR 본문에서 한 번 기록합니다.
 - 중앙 실행 로직은 독립 zip_release_review 리뷰에서 지적 수정 후 추가 지적 없음. 대상 caller/메타데이터/ZIP도 별도 독립 리뷰합니다. 로컬 HA 환경 재구축·새 릴리스 발행·asset 업로드·기기 설치는 수행하지 않으며 미실행을 PASS로 기록하지 않습니다. immutable-releases는 enabled:false로 확인했습니다.
+
+
+## blesession 및 진단 센서 적용 (2026-10-23)
+
+- 범위: 기존 공용 CI 구조를 유지하고 `blesession>=0.9.0`을 런타임에 추가. 최소 의존성 matrix와 updater 대상에 blesession 포함.
+- `hass-niimbot`의 세션·오류 보존 방식을 참고해 연결 재사용, 연결 해제 감지, 구독 복구/정리, 전송 시간 제한을 적용. 기존 Marklife 패킷·크레딧 흐름 제어와 인쇄 후 연결 종료 정책은 유지하며 실패한 인쇄를 자동 재전송하지 않음.
+- 기존 Connection 엔티티 ID를 유지하고 진단 범주와 최근 세션 속성을 추가. Last error / Error count 진단 센서를 추가하고 Print Duration에 최근 인쇄 세션을 보존. 정기 조회의 unreachable/connect 실패는 오류 횟수와 최근 실제 실패를 덮어쓰지 않음. 연결 후 완전 무응답은 기존 측정값을 유지하며 timeout으로 기록.
+- 실물 Marklife 프린터 및 ESPHome proxy에서 이번 변경의 동작은 미검증. 아래는 외부 GATT 통신만 대체한 실제 HA 통합 테스트 결과.
+
+| 환경 | 실제 설치 버전 | 검증 결과 |
+|---|---|---|
+| current | Python 3.14.7 / HA 2026.10.2 / pytest HA plugin 0.13.373 / blesession 0.9.0 / imagespec 1.1.0 | 197 passed, 6 skipped; uv pip check PASS |
+| minimum HA 및 정확한 라이브러리 하한 | Python 3.13.15 / HA 2025.9.0 / pytest HA plugin 0.13.277 / blesession 0.9.0 / imagespec 1.1.0 | 197 passed, 6 skipped; uv pip check PASS |
+
+- 전체 회귀는 중앙 payload plugin을 포함해 실행: `PYTHONPATH=../hass-repo-standards/scripts PAYLOAD_REPOSITORY="$PWD" PAYLOAD_DOMAIN=marklife python -m pytest -p hass_standards_payload tests/components/marklife/ -q` (WSL Ubuntu).
+- 신규 회귀: 연결 재사용 및 갑작스러운 해제/복구, 인쇄 연결 실패와 이후 성공 시 오류 보존, unreachable, 조회 중 링크 해제, 부분 구독 실패 정리, 취소 시 정리, 전송 실패 시 재인쇄 방지, 조회 완전 무응답, GATT WriteTimeout 원인 보존.
+- Ruff check / format check 및 git diff --check PASS. 중앙 DOC-07 문서 검사 통과. 최신 중앙 전체 검사는 기존 README.md / README.ko.md 관리 헤더의 DOC-01 경고 2건으로 미통과이며, 해당 헤더가 HEAD와 동일함을 확인. 사용자 요청 범위에 맞춰 헤더/공용화 재적용은 하지 않음.
+- 원격 HACS/Hassfest는 이 로컬 변경에서 실행하지 않음.
+
+### 추가 자체 리뷰 (2026-10-23)
+
+- GATT의 BleakError가 인쇄 서비스 경계에서 HomeAssistantError로 변환되지 않는 기존 누락을 보완. 서비스 메시지 주소 마스킹, 진단 기록 및 연결 정리를 함께 검증하는 회귀 테스트 추가.
+- 변경 후 관련 세션·서비스 회귀는 current/minimum HA 각각 22 passed. Ruff 및 git diff --check PASS. 앞선 전체 197 passed는 이 추가 수정 전 결과이며, 추가 수정 후에는 관련 회귀를 실행함. 독립 리뷰는 수행하지 않음.

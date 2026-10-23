@@ -86,7 +86,7 @@ data:
 - [Payload 안내](docs/payload.ko.md) — 전체 액션 예제, 출력 설정 및 렌더러 제한.
 
 - [사용자 가이드](docs/ko/user-guide.md) — 전체 모델 목록, 상세 옵션, 엔티티, 출력 방향 안내 및 `imagespec` 서식 예제.
-- [문제 해결](docs/ko/troubleshooting.md) — 흐름 제어(Credit starvation) 튜닝, 패킷 크기 조정, 연결 오류 점검 및 로그 보고 방법.
+- [문제 해결](docs/troubleshooting.ko.md) — 흐름 제어(Credit starvation) 튜닝, 패킷 크기 조정, 연결 오류 점검 및 로그 보고 방법.
 - [개발 및 테스트](docs/development.md) — 통합 구조, 실제 Home Assistant 테스트 환경 및 표준 채택 안내.
 - [블루투스 프록시 가이드](https://github.com/eigger/blesession/blob/main/docs/bluetooth.ko.md) — 공통 하드웨어 및 ESPHome 프록시 설정 가이드.
 

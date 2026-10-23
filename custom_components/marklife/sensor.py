@@ -68,6 +68,10 @@ async def async_setup_entry(
         if key in coordinator.data.sensors
     ]
     entities.append(MarklifePrintDurationSensor(coordinator, device))
+    entities.extend(
+        MarklifeDiagnosticSensor(coordinator, device, key)
+        for key in ("last_error", "error_count")
+    )
 
     async_add_entities(entities)
 
@@ -91,6 +95,45 @@ class MarklifeSensor(CoordinatorEntity[DataUpdateCoordinator[BLEData]], SensorEn
     @property
     def native_value(self) -> StateType:
         return self.coordinator.data.sensors.get(self.entity_description.key)
+
+
+class MarklifeDiagnosticSensor(MarklifeSensor):
+    """Persist the last actionable failure across successful sessions."""
+
+    def __init__(self, coordinator, device: MarklifeDevice, key: str) -> None:
+        super().__init__(
+            coordinator,
+            SensorEntityDescription(
+                key=key,
+                translation_key=key,
+                entity_category=EntityCategory.DIAGNOSTIC,
+                icon="mdi:alert-circle-outline"
+                if key == "last_error"
+                else "mdi:counter",
+                state_class=SensorStateClass.TOTAL_INCREASING
+                if key == "error_count"
+                else None,
+            ),
+        )
+        self._device = device
+
+    async def async_added_to_hass(self) -> None:
+        await super().async_added_to_hass()
+        self.async_on_remove(self._device.add_connection_listener(self._handle_update))
+
+    @callback
+    def _handle_update(self) -> None:
+        self.async_write_ha_state()
+
+    @property
+    def native_value(self) -> StateType:
+        if self.entity_description.key == "error_count":
+            return self._device.error_count
+        return self._device.last_error
+
+    @property
+    def extra_state_attributes(self) -> dict | None:
+        return self._device.reports.last_failure
 
 
 class MarklifePrintDurationSensor(
@@ -164,4 +207,5 @@ class MarklifePrintDurationSensor(
         return {
             "formatted": f"{int(duration // 60):02d}:{int(duration % 60):02d}",
             "is_printing": self._device.is_printing,
+            **(self._device.last_print_report or {}),
         }
