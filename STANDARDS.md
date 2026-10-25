@@ -1,7 +1,7 @@
 # 적용한 공통 규칙
 
-- 표준: https://github.com/eigger/hass-repo-standards/tree/0c1592977591ecba077a4666d699840062711201
-- 참조 커밋 SHA: `0c1592977591ecba077a4666d699840062711201`
+- 표준: https://github.com/eigger/hass-repo-standards/tree/4ccbffa9af618b14d1a32a9939cbf1fcee6cb7a0
+- 참조 커밋 SHA: `4ccbffa9af618b14d1a32a9939cbf1fcee6cb7a0`
 - 이전 기준: `8cd5588bf7f010fcce5fb03bd521aaaa36cb0518`, 최초 채택 PR [#11](https://github.com/eigger/hass-marklife/pull/11), main `7149585`
 - 재검토일: 2026-10-20
 - profile: integration / ha; domain `marklife`, 실제 기본 브랜치 `main`
@@ -55,3 +55,10 @@
 - 중앙 workflow/action pin과 standards-ref는 단일 SHA로 정합화합니다. release:published에서 기존 해당 릴리스에 ZIP만 첨부하며 소스 버전·태그·릴리스 발행은 자동 변경하지 않습니다. 기존 asset 덮어쓰기를 거부합니다.
 - 기존 지원 최소 HA `2025.9.0`와 통합 버전 `0.2.4` 및 의존성·구현은 보존합니다. 기존 태그의 hacs.json은 소급 수정하지 않으므로 다음 릴리스부터 ZIP 설치로 전환됩니다.
 - immutable-releases 설정은 enabled=false/enforced_by_owner=false로 확인했습니다. 업로드 지연·실패 및 기존 asset 복구는 중앙 [릴리스 계약](https://github.com/eigger/hass-repo-standards/blob/0c1592977591ecba077a4666d699840062711201/docs/releases.md#zip-릴리스-첨부)을 따릅니다. 실제 새 릴리스 발행·설치·기기 검증은 이번 작업에 포함하지 않습니다.
+
+## 2026-10-25 Dependabot Actions SHA 호환성 수정
+
+- 중앙 수정 커밋 `4ccbffa9af618b14d1a32a9939cbf1fcee6cb7a0`을 검토하여 모든 중앙 workflow/action pin과 standards-ref를 함께 갱신합니다. 이전 기준 `0c1592977591ecba077a4666d699840062711201`의 채택 이력은 위에 보존합니다.
+- HACS-04 검사는 actions/*의 전체 SHA 고정을 유지하면서 SHA 값 차이를 허용합니다. PR #18과 같은 Dependabot 갱신이 중앙 release 템플릿과 다른 SHA라는 이유로 실패하지 않게 합니다.
+- 비교 범위: 중앙 0c1592977591ecba077a4666d699840062711201..4ccbffa9af618b14d1a32a9939cbf1fcee6cb7a0. 공용 workflow와 actions 실행 파일은 동일하며, release 비교 정규화·ZIP 다운로드 배지·release 전용 기준 기록 지원이 변경되었습니다. 이 저장소는 이미 HACS default Downloads 배지를 사용합니다.
+- 검증 근거는 이 수정 PR의 CI와 로컬 검사 결과에 기록합니다. 통합 구현·의존성·지원 최소 및 릴리스 발행 동작은 변경하지 않습니다.
