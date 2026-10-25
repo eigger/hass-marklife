@@ -124,3 +124,10 @@
 - Plan: `standards.reference.descriptor`, `standards.planning.reference_only_workflow_update`, `reference_only_workflow_content`, and `recorded_standards_update` generated/validated the narrow reference edits; before/after path hashes and operations are retained in the rollout plan.
 - Local validation (Python 3.14 shared rollout environment): central `scripts/check_integration.py` PASS, actionlint 1.7.12 PASS for every workflow, and `git diff --check` PASS. The same central checker baseline also PASSed before the migration. A path/fingerprint assertion confirms manifest, hacs/support metadata, requirements, custom integration code and tests are unchanged.
 - Review: generated reference-only change self-reviewed under GOV-05; root will perform the requested cross-review. GitHub Actions/PR CI and merge are pending; no HA/device/runtime test was run for this documentation/workflow-reference-only migration, and prior runtime evidence is not reused as this change's test result.
+
+## 2026-10-25 Standards workflow 분리
+
+- 대상: 기본 브랜치 `c1a0fa5b2b2c95e836bfdb2172d7dbd3b4b4b9a0` 이후 로컬 diff. 기존 검사 job을 중앙 `templates/integration/.github/workflows/standards.yml`에 맞춰 분리하며 표시 이름만 `Standards`로 변경했습니다. 중앙 참조·Hassfest 입력·지원 최소·의존성·README·런타임·테스트는 보존했습니다.
+- 독립 리뷰 `ci_unify_review`: 수정하지 않은 별도 복사본에서 이전 job/YAML 동등성·중앙 템플릿 일치·보존 범위를 확인했습니다. `check_integration.py` (Python 3.14.5 / PyYAML 6.0.3 / packaging 26.3), actionlint 1.7.12 전체 workflow, `git diff --check` 통과.
+- 초기 Python 3.9 검사/도구 부재를 완료 근거로 사용하지 않았고 위 독립 환경에서 재검증했습니다. branch protection 조회는 HTTP 401로 required checks 확인 불가입니다.
+- 사용자 요청으로 이 변경을 별도 PR로 게시합니다. PR의 원격 CI는 로컬 검사와 별도로 확인하며 수동 dispatch·HA/기기 재검증은 수행하지 않았습니다. 이번 검사 결과를 전체 재채택 완료로 사용하지 않습니다.

@@ -63,3 +63,7 @@
 - HACS-04 검사는 actions/*의 전체 SHA 고정을 유지하면서 SHA 값 차이를 허용합니다. PR #18과 같은 Dependabot 갱신이 중앙 release 템플릿과 다른 SHA라는 이유로 실패하지 않게 합니다.
 - 비교 범위: 중앙 0c1592977591ecba077a4666d699840062711201..4ccbffa9af618b14d1a32a9939cbf1fcee6cb7a0. 공용 workflow와 actions 실행 파일은 동일하며, release 비교 정규화·ZIP 다운로드 배지·release 전용 기준 기록 지원이 변경되었습니다. 이 저장소는 이미 HACS default Downloads 배지를 사용합니다.
 - 검증 근거는 이 수정 PR의 CI와 로컬 검사 결과에 기록합니다. 통합 구현·의존성·지원 최소 및 릴리스 발행 동작은 변경하지 않습니다.
+
+## 2026-10-25 Standards workflow 분리
+
+기준 `v1.0.0` / `44349ee5621eea5d80e5c427f7a2435d2c2491bb`를 유지하고 기존 Validate의 중앙 검사 job만 `standards.yml`로 이동해 workflow/job을 `Standards`로 표시합니다. 단계·SHA·이벤트·예약·권한·timeout과 기존 Validate caller 입력은 유지합니다. 실제 검증과 미게시 범위는 [체크리스트](ADOPTION_CHECKLIST.md#2026-10-25-standards-workflow-분리)를 따릅니다.
