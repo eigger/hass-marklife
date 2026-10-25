@@ -11,9 +11,9 @@ concurrency:
   cancel-in-progress: true
 jobs:
   current:
-    uses: eigger/hass-repo-standards/.github/workflows/python-tests.yml@0c1592977591ecba077a4666d699840062711201 # reviewed standards commit
+    uses: eigger/hass-repo-standards/.github/workflows/python-tests.yml@4ccbffa9af618b14d1a32a9939cbf1fcee6cb7a0 # reviewed standards commit
     with:
-      standards-ref: 0c1592977591ecba077a4666d699840062711201
+      standards-ref: 4ccbffa9af618b14d1a32a9939cbf1fcee6cb7a0
       domain: marklife
       python-versions: '["3.14"]'
       lint-python-version: '3.14'
@@ -24,9 +24,9 @@ jobs:
       dependency-modes: '["current", "minimum"]'
       minimum-packages: '["imagespec", "blesession"]'
   minimum-ha:
-    uses: eigger/hass-repo-standards/.github/workflows/python-tests.yml@0c1592977591ecba077a4666d699840062711201 # reviewed standards commit
+    uses: eigger/hass-repo-standards/.github/workflows/python-tests.yml@4ccbffa9af618b14d1a32a9939cbf1fcee6cb7a0 # reviewed standards commit
     with:
-      standards-ref: 0c1592977591ecba077a4666d699840062711201
+      standards-ref: 4ccbffa9af618b14d1a32a9939cbf1fcee6cb7a0
       domain: marklife
       python-versions: '["3.13"]'
       lint-python-version: '3.14'
