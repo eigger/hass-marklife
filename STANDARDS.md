@@ -1,8 +1,8 @@
 # 적용한 공통 규칙
-- 표준: https://github.com/eigger/hass-repo-standards/tree/v1.1.3
-- 참조 커밋 SHA: c8c2771a2de68769af40f56e19e958e374e6e091
-- Standards release: v1.1.3
-- Resolved standards SHA: c8c2771a2de68769af40f56e19e958e374e6e091
+- 표준: https://github.com/eigger/hass-repo-standards/tree/v1.1.4
+- 참조 커밋 SHA: a90531d05613597632a4c10c11ce1dbc45e0bab6
+- Standards release: v1.1.4
+- Resolved standards SHA: a90531d05613597632a4c10c11ce1dbc45e0bab6
 - 이전 기준: `8cd5588bf7f010fcce5fb03bd521aaaa36cb0518`, 최초 채택 PR [#11](https://github.com/eigger/hass-marklife/pull/11), main `7149585`
 - 재검토일: 2026-10-20
 - profile: integration / ha; domain `marklife`, 실제 기본 브랜치 `main`
