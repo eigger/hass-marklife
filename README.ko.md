@@ -12,11 +12,11 @@ Home Assistant의 자체 블루투스 스택 및 ESPHome 블루투스 프록시�
 [![Tests](https://img.shields.io/github/actions/workflow/status/eigger/hass-marklife/tests.yml?branch=main&style=flat&label=Tests)](https://github.com/eigger/hass-marklife/actions/workflows/tests.yml)
 [![Validate](https://img.shields.io/github/actions/workflow/status/eigger/hass-marklife/validate.yml?branch=main&style=flat&label=Validate)](https://github.com/eigger/hass-marklife/actions/workflows/validate.yml)
 [![License](https://img.shields.io/github/license/eigger/hass-marklife?style=flat)](LICENSE)
-[![Downloads](https://img.shields.io/github/downloads/eigger/hass-marklife/total?style=flat&color=41BDF5&label=Downloads)](https://github.com/eigger/hass-marklife/releases)
+[![Downloads](https://img.shields.io/github/downloads/eigger/hass-marklife/latest/total?style=flat&color=41BDF5&label=Downloads)](https://github.com/eigger/hass-marklife/releases)
 <!-- hass-standards:badges:end -->
 <!-- hass-standards:header:end -->
 
-Downloads 배지는 모든 GitHub 릴리스의 첨부 asset 다운로드 합계이며 활성 설치 수가 아닙니다.
+Downloads 배지는 현재 GitHub 릴리스의 첨부 asset 다운로드 합계이며 활성 설치 수가 아닙니다.
 
 ## 갤러리
 

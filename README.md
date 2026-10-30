@@ -12,11 +12,11 @@ A HACS custom integration for Marklife Bluetooth thermal label printers (such as
 [![Tests](https://img.shields.io/github/actions/workflow/status/eigger/hass-marklife/tests.yml?branch=main&style=flat&label=Tests)](https://github.com/eigger/hass-marklife/actions/workflows/tests.yml)
 [![Validate](https://img.shields.io/github/actions/workflow/status/eigger/hass-marklife/validate.yml?branch=main&style=flat&label=Validate)](https://github.com/eigger/hass-marklife/actions/workflows/validate.yml)
 [![License](https://img.shields.io/github/license/eigger/hass-marklife?style=flat)](LICENSE)
-[![Downloads](https://img.shields.io/github/downloads/eigger/hass-marklife/total?style=flat&color=41BDF5&label=Downloads)](https://github.com/eigger/hass-marklife/releases)
+[![Downloads](https://img.shields.io/github/downloads/eigger/hass-marklife/latest/total?style=flat&color=41BDF5&label=Downloads)](https://github.com/eigger/hass-marklife/releases)
 <!-- hass-standards:badges:end -->
 <!-- hass-standards:header:end -->
 
-The Downloads badge counts GitHub release asset downloads across all releases, not active installations.
+The Downloads badge counts GitHub release asset downloads of the current release, not active installations.
 
 ## Gallery
 
