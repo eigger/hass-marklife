@@ -5,34 +5,90 @@
     "recorder"
   ],
   "bluetooth": [
-    { "local_name": "P15*" },
-    { "local_name": "P12*" },
-    { "local_name": "P11*" },
-    { "local_name": "P1s*" },
-    { "local_name": "P1S*" },
-    { "local_name": "P7R*" },
-    { "local_name": "P7-*" },
-    { "local_name": "P7_*" },
-    { "local_name": "LP15*" },
-    { "local_name": "LP90*" },
-    { "local_name": "LPC74*" },
-    { "local_name": "iSPACE_LP15*" },
-    { "local_name": "OUT_LPC*" },
-    { "local_name": "S15*" },
-    { "local_name": "S12*" },
-    { "local_name": "M1-*" },
-    { "local_name": "M1_*" },
-    { "local_name": "M60*" },
-    { "local_name": "X2-*" },
-    { "local_name": "X2_*" },
-    { "local_name": "S2-*" },
-    { "local_name": "S2_*" },
-    { "local_name": "P50*" },
-    { "local_name": "D50*" },
-    { "local_name": "P80*" },
-    { "local_name": "T3-*" },
-    { "local_name": "T3_*" },
-    { "local_name": "ewtto ET-*" }
+    {
+      "local_name": "P15*"
+    },
+    {
+      "local_name": "P12*"
+    },
+    {
+      "local_name": "P11*"
+    },
+    {
+      "local_name": "P1s*"
+    },
+    {
+      "local_name": "P1S*"
+    },
+    {
+      "local_name": "P7R*"
+    },
+    {
+      "local_name": "P7-*"
+    },
+    {
+      "local_name": "P7_*"
+    },
+    {
+      "local_name": "LP15*"
+    },
+    {
+      "local_name": "LP90*"
+    },
+    {
+      "local_name": "LPC74*"
+    },
+    {
+      "local_name": "iSPACE_LP15*"
+    },
+    {
+      "local_name": "OUT_LPC*"
+    },
+    {
+      "local_name": "S15*"
+    },
+    {
+      "local_name": "S12*"
+    },
+    {
+      "local_name": "M1-*"
+    },
+    {
+      "local_name": "M1_*"
+    },
+    {
+      "local_name": "M60*"
+    },
+    {
+      "local_name": "X2-*"
+    },
+    {
+      "local_name": "X2_*"
+    },
+    {
+      "local_name": "S2-*"
+    },
+    {
+      "local_name": "S2_*"
+    },
+    {
+      "local_name": "P50*"
+    },
+    {
+      "local_name": "D50*"
+    },
+    {
+      "local_name": "P80*"
+    },
+    {
+      "local_name": "T3-*"
+    },
+    {
+      "local_name": "T3_*"
+    },
+    {
+      "local_name": "ewtto ET-*"
+    }
   ],
   "categories": [
     "computers_network.printers"
@@ -48,8 +104,8 @@
   "iot_class": "local_polling",
   "issue_tracker": "https://github.com/eigger/hass-marklife/issues",
   "requirements": [
-    "blesession>=0.9.0",
-    "imagespec[datamatrix]>=1.1.0"
+    "blesession>=0.9.1",
+    "imagespec[datamatrix]>=1.1.1"
   ],
   "version": "0.3.0"
 }
