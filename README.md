@@ -1,7 +1,7 @@
 <!-- hass-standards:header:start -->
-# hass-marklife
+# Marklife for Home Assistant
 
-A HACS custom integration for Marklife Bluetooth thermal label printers (such as P15, P12, M60, P50, and compatible models) using Home Assistant's native Bluetooth stack and ESPHome Bluetooth proxies. Generates and prints declarative label layouts via [imagespec](https://github.com/eigger/imagespec).
+A Home Assistant custom integration that prints [imagespec](https://github.com/eigger/imagespec) layouts on Marklife Bluetooth thermal label printers, including P15, P12, M60, P50 and compatible models.
 
 **English** | [한국어](README.ko.md)
 
@@ -16,15 +16,13 @@ A HACS custom integration for Marklife Bluetooth thermal label printers (such as
 <!-- hass-standards:badges:end -->
 <!-- hass-standards:header:end -->
 
-The Downloads badge counts GitHub release asset downloads of the current release, not active installations.
-
 ## Gallery
 
 | P15 |
 | :---: |
 | <img src="docs/images/p15.jpg" width="300" alt="Marklife P15"> |
 
-## Supported Devices
+## Supported devices
 
 - **Tested & Verified**: **Marklife P15** (L11 protocol family, 384 px print head) with local Bluetooth adapters and ESPHome proxies.
 - **Compatible Families**: P12, P11, P7, P1s, M1, M60, X2, P50, and related BLE models.
@@ -33,9 +31,9 @@ The Downloads badge counts GitHub release asset downloads of the current release
 
 ## Requirements
 
-- Home Assistant **2025.9.0** or newer.
-- A functional Bluetooth adapter or [ESPHome Bluetooth proxy](https://github.com/eigger/blesession/blob/main/docs/bluetooth.md) with active connections enabled (`bluetooth_proxy: active: true`).
-- A supported Marklife BLE printer. Disconnect vendor mobile apps before printing.
+- **Home Assistant:** 2025.9.0 or later.
+- **Bluetooth:** A Bluetooth adapter or ESPHome Bluetooth proxy with `bluetooth_proxy: active: true`.
+- **Device:** A supported Marklife BLE printer.
 
 ## Installation
 
@@ -43,13 +41,17 @@ The Downloads badge counts GitHub release asset downloads of the current release
 [![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=eigger&repository=hass-marklife)
 <!-- hass-standards:installation:end -->
 
-1. Search for **Marklife** in **HACS → Integrations** and download it, or copy `custom_components/marklife/` into your Home Assistant `custom_components/` directory.
-2. Restart Home Assistant.
-3. Open **Settings → Devices & services** and confirm the automatically discovered printer, or choose **Add integration → Marklife** (falls through to a manual address/model selection step if not automatically detected).
+1. Click the badge above to open the repository in Marketplace.
+2. If you need to add it yourself, go to **Settings → Marketplace → Add from link** and enter <https://github.com/eigger/hass-marklife>. Connect GitHub if prompted.
+3. Select **Install**. Restart Home Assistant if prompted, then continue to [Configuration](#configuration).
 
-Refer to the [Bluetooth proxy guide](https://github.com/eigger/blesession/blob/main/docs/bluetooth.md) for ESPHome setup recommendations (e.g. XIAO W5500 V1.2 or M5Stack AtomS3U).
+## Configuration
 
-## Quick Start
+Disconnect vendor mobile apps before printing. Open **Settings → Devices & services** and confirm discovery, or choose **Add integration → Marklife**. If discovery fails, enter the printer address and model.
+
+See the [Bluetooth proxy guide](https://github.com/eigger/blesession/blob/main/docs/bluetooth.md) for ESPHome setup and boards such as XIAO W5500 V1.2 or M5Stack AtomS3U.
+
+## Quick start
 
 Print a basic label via the `marklife.print` action:
 
@@ -75,7 +77,7 @@ data:
   height: 96
 ```
 
-## Important Limitations
+## Important limitations
 
 - **Single Connection**: BLE thermal printers accept only one active connection at a time. Close the smartphone vendor app before attempting to connect from Home Assistant.
 - **Bluetooth Classic & Proprietary**: Models requiring Bluetooth Classic or proprietary protocols cannot be connected via BLE and will be rejected during discovery.

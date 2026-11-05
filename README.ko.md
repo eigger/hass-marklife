@@ -1,7 +1,7 @@
 <!-- hass-standards:header:start -->
-# hass-marklife
+# Marklife for Home Assistant
 
-Home Assistant의 자체 블루투스 스택 및 ESPHome 블루투스 프록시를 통해 Marklife 블루투스 감열 라벨 프린터(P15, P12, M60, P50 및 호환 모델)를 제어하고, [imagespec](https://github.com/eigger/imagespec) 선언형 레이아웃을 통해 라벨을 인쇄하는 HACS 커스텀 통합 구성요소입니다.
+Marklife Bluetooth 감열 라벨 프린터(P15, P12, M60, P50 및 호환 모델)에 [imagespec](https://github.com/eigger/imagespec) 레이아웃을 인쇄하는 Home Assistant 커스텀 통합입니다.
 
 [English](README.md) | **한국어**
 
@@ -15,8 +15,6 @@ Home Assistant의 자체 블루투스 스택 및 ESPHome 블루투스 프록시�
 [![Downloads](https://img.shields.io/github/downloads/eigger/hass-marklife/latest/total?style=flat&color=41BDF5&label=Downloads)](https://github.com/eigger/hass-marklife/releases)
 <!-- hass-standards:badges:end -->
 <!-- hass-standards:header:end -->
-
-Downloads 배지는 현재 GitHub 릴리스의 첨부 asset 다운로드 합계이며 활성 설치 수가 아닙니다.
 
 ## 갤러리
 
@@ -33,9 +31,9 @@ Downloads 배지는 현재 GitHub 릴리스의 첨부 asset 다운로드 합계�
 
 ## 요구사항
 
-- Home Assistant **2025.9.0** 이상.
-- 동작 가능한 블루투스 어댑터 또는 활성 연결이 켜진 [ESPHome 블루투스 프록시](https://github.com/eigger/blesession/blob/main/docs/bluetooth.ko.md) (`bluetooth_proxy: active: true`).
-- 지원되는 Marklife BLE 라벨 프린터 (인쇄 전 스마트폰 앱 연결 해제 필요).
+- **Home Assistant:** 2025.9.0 이상.
+- **Bluetooth:** Bluetooth 어댑터 또는 `bluetooth_proxy: active: true`로 설정한 ESPHome Bluetooth 프록시.
+- **기기:** 지원되는 Marklife BLE 라벨 프린터.
 
 ## 설치
 
@@ -43,11 +41,15 @@ Downloads 배지는 현재 GitHub 릴리스의 첨부 asset 다운로드 합계�
 [![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=eigger&repository=hass-marklife)
 <!-- hass-standards:installation:end -->
 
-1. **HACS → 통합(Integrations)**에서 **Marklife**를 검색하여 다운로드하거나, `custom_components/marklife/` 폴더를 Home Assistant의 `custom_components/` 디렉터리에 복사합니다.
-2. Home Assistant를 다시 시작합니다.
-3. **설정 → 기기 및 서비스**에서 자동으로 검색된 프린터를 확인하거나, **통합 추가 → Marklife**를 선택합니다 (자동 검색이 되지 않는 경우 수동 주소/모델 선택 단계로 진행됩니다).
+1. 위 배지를 클릭해 마켓플레이스에서 저장소를 엽니다.
+2. 저장소를 직접 추가하려면 **설정 → 마켓플레이스 → 링크에서 추가**에서 <https://github.com/eigger/hass-marklife>을 입력합니다. 안내가 표시되면 GitHub 계정을 연결합니다.
+3. **설치**를 선택합니다. 재시작 안내가 표시되면 Home Assistant를 재시작합니다. 설치가 끝나면 [설정](#설정)으로 이동합니다.
 
-ESPHome 프록시 보드 추천(XIAO W5500 V1.2, M5Stack AtomS3U 등) 및 설정 방법은 [블루투스 프록시 안내](https://github.com/eigger/blesession/blob/main/docs/bluetooth.ko.md)를 참고하세요.
+## 설정
+
+인쇄 전에 제조사 앱 연결을 해제합니다. **설정 → 기기 및 서비스**에서 발견된 프린터를 확인하거나 **통합 추가 → Marklife**를 선택합니다. 자동 검색이 되지 않으면 프린터 주소와 모델을 입력합니다.
+
+ESPHome 설정과 XIAO W5500 V1.2, M5Stack AtomS3U 등 추천 보드는 [Bluetooth 프록시 안내](https://github.com/eigger/blesession/blob/main/docs/bluetooth.ko.md)를 참고하세요.
 
 ## 빠른 시작
 
@@ -81,7 +83,9 @@ data:
 - **클래식 블루투스 및 독자 규격 미지원**: 블루투스 클래식이나 독자 프로토콜을 사용하는 기기는 BLE로 제어할 수 없으며 검색 시 거부됩니다.
 - **프록시 슬롯 제약**: ESP32 프록시는 동시 연결을 최대 3개까지만 지원합니다. 슬롯 고갈에 유의하세요.
 
-## 관련 문서
+<a name="관련-문서"></a>
+
+## 문서
 
 - [Payload 안내](docs/payload.ko.md) — 전체 액션 예제, 출력 설정 및 렌더러 제한.
 
